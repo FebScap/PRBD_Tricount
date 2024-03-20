@@ -29,7 +29,7 @@ public class PridContext : DbContextBase
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
-        base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(modelBuilder)
     }
 
     private static void ConfigureOptions(DbContextOptionsBuilder optionsBuilder) {
@@ -41,12 +41,12 @@ public class PridContext : DbContextBase
     }
     
     public DbSet<User> Users => Set<User>();
-    public DbSet<Tricounts> Tricounts => Set<Tricounts>();
-    public DbSet<Subscriptions> Subscriptions => Set<Subscriptions>();
-    public DbSet<Operations> Operations => Set<Operations>();
-    public DbSet<Repartitions> Repartitions => Set<Repartitions>();
-    public DbSet<Templates> Templates => Set<Templates>();
-    public DbSet<TemplateItems> UTemplateItems => Set<TemplateItems>();
+    public DbSet<Tricount> Tricounts => Set<Tricount>();
+    public DbSet<Subscription> Subscriptions => Set<Subscription>();
+    public DbSet<Operation> Operations => Set<Operation>();
+    public DbSet<Repartition> Repartitions => Set<Repartition>();
+    public DbSet<Template> Templates => Set<Template>();
+    public DbSet<TemplateItem> UTemplateItems => Set<TemplateItem>();
 
 
 

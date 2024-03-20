@@ -13,5 +13,12 @@ public class Repartition : EntityBase<PridContext>
 
     [Required, ForeignKey(nameof(User))]
     public int User { get; set; }
-    
+
+    public Repartition(int weight, int operation, int user) {
+        Weight = weight;
+        Operation = operation;
+        User = user;
+    }
+
+    public Repartition() { }
 }

@@ -13,4 +13,12 @@ public class TemplateItem : EntityBase<PridContext>
 
     [Required, ForeignKey(nameof(Template))]
     public int Template { get; set; }
+
+    public TemplateItem(int weight, int user, int template) {
+        Weight = weight;
+        User = user;
+        Template = template;
+    }
+
+    public TemplateItem() { }
 }

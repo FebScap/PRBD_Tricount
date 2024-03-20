@@ -16,4 +16,13 @@ public class Operation : EntityBase<PridContext>
 
     [Required, ForeignKey(nameof(User))]
     public int Initiator {  get; set; }
+
+    public Operation(string title, int tricount, double amount, int initiator) {
+        Title = title;
+        Tricount = tricount;
+        Amount = amount;
+        Initiator = initiator;
+    }
+
+    public Operation() { }
 }

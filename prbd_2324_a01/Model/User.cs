@@ -9,4 +9,13 @@ public class User : EntityBase<PridContext>
     public string HashedPassword { get; set; }
     public string FullName { get; set; }
     public int Role {  get; set; }
+
+    public User(string mail, string hashedPassword, string fullName, int role) {
+        Mail = mail;
+        HashedPassword = hashedPassword;
+        FullName = fullName;
+        Role = role;
+    }
+
+    public User() { }
 }

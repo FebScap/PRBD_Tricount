@@ -13,4 +13,12 @@ public class Tricount : EntityBase<PridContext>
     [Required, ForeignKey(nameof(User))]
     public int Creator {  get; set; }
     public int Id { get; set; }
+
+    public Tricount(string title, string description, int creator) {
+        Title = title;
+        Description = description;
+        Creator = creator;
+    }
+
+    public Tricount() { }
 }

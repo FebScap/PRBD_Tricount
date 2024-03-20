@@ -10,4 +10,11 @@ public class Template : EntityBase<PridContext>
     [Required, ForeignKey(nameof(Tricount))]
     public int Tricount { get; set; }
     public int Id { get; set; }
+
+    public Template(string title, int tricount) {
+        Title = title;
+        Tricount = tricount;
+    }
+
+    public Template() { }
 }

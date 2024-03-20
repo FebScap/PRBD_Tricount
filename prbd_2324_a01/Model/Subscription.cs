@@ -11,4 +11,11 @@ public class Subscription : EntityBase<PridContext>
 
     [Required, ForeignKey(nameof(User))]
     public int User { get; set;}
+
+    public Subscription(int tricount, int user) {
+        Tricount = tricount;
+        User = user;
+    }
+
+    public Subscription() { }
 }

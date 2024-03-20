@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PRBD_Framework;
 using System.Configuration;
+using System.Data;
 
 namespace prbd_2324_a01.Model;
 
@@ -29,7 +30,9 @@ public class PridContext : DbContextBase
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
-        base.OnModelCreating(modelBuilder)
+        base.OnModelCreating(modelBuilder);
+
+        SeedData(modelBuilder);
     }
 
     private static void ConfigureOptions(DbContextOptionsBuilder optionsBuilder) {
@@ -39,7 +42,13 @@ public class PridContext : DbContextBase
             .EnableDetailedErrors() // attention : ralentit les requêtes
             ;
     }
+
+    private void SeedData(ModelBuilder modelBuilder) {
+        
+    }
+
     
+    // Création des tables
     public DbSet<User> Users => Set<User>();
     public DbSet<Tricount> Tricounts => Set<Tricount>();
     public DbSet<Subscription> Subscriptions => Set<Subscription>();
@@ -47,7 +56,4 @@ public class PridContext : DbContextBase
     public DbSet<Repartition> Repartitions => Set<Repartition>();
     public DbSet<Template> Templates => Set<Template>();
     public DbSet<TemplateItem> UTemplateItems => Set<TemplateItem>();
-
-
-
 }

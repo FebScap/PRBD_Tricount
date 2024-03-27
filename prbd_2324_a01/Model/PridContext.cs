@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Logging;
 using PRBD_Framework;
 using System.Configuration;
@@ -44,6 +45,13 @@ public class PridContext : DbContextBase
     }
 
     private void SeedData(ModelBuilder modelBuilder) {
+        modelBuilder.Entity<User>().HasData(
+                new User("boverhaegen@epfc.eu", "3D4AEC0A9B43782133B8120B2FDD8C6104ABB513FE0CDCD0D1D4D791AA42E338:C217604FDAEA7291C7BA5D1D525815E4:100000:SHA256", "Boris", 0),
+                new User("bepenelle@epfc.eu", "9E58D87797C6795D294E6762B6C05116D075BC18445AD4078C25674809DB57EF:C91E0B85B7264877C0424D52494D6296:100000:SHA256", "Boris", 0),
+                new User("xapigeolet@epfc.eu", "5B979AB86EC73B0996F439D0BC3947ECCFA0A41310C77533EA36CB409DBB1243:0CF43009110DE4B4AA6D4E749F622755:100000:SHA256", "Boris", 0),
+                new User("mamichel@epfc.eu", "955F147CE3473774E35EE58F4233AA84AE9118C6ECD4699DD788B8D588238034:5514D1DD0A97E9BA7FE4C0B5A4E89351:100000:SHA256", "Boris", 0),
+                new User("admin@epfc.eu", "C9949A02A5DFBE50F1DA289DC162E3C97443AB09CE6F6EB1FD0C9D51B5241BBD:5533437973C5BC6459DB687CA5BDE76C:100000:SHA256", "Boris", 0)
+            );
         
     }
 
@@ -53,7 +61,6 @@ public class PridContext : DbContextBase
     public DbSet<Tricount> Tricounts => Set<Tricount>();
     public DbSet<Subscription> Subscriptions => Set<Subscription>();
     public DbSet<Operation> Operations => Set<Operation>();
+
     public DbSet<Repartition> Repartitions => Set<Repartition>();
-    public DbSet<Template> Templates => Set<Template>();
-    public DbSet<TemplateItem> UTemplateItems => Set<TemplateItem>();
 }

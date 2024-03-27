@@ -52,8 +52,25 @@ public class PridContext : DbContextBase
                 new User("mamichel@epfc.eu", "955F147CE3473774E35EE58F4233AA84AE9118C6ECD4699DD788B8D588238034:5514D1DD0A97E9BA7FE4C0B5A4E89351:100000:SHA256", "Boris", 0),
                 new User("admin@epfc.eu", "C9949A02A5DFBE50F1DA289DC162E3C97443AB09CE6F6EB1FD0C9D51B5241BBD:5533437973C5BC6459DB687CA5BDE76C:100000:SHA256", "Boris", 0)
             );
+
+        int count = 0;
+        modelBuilder.Entity<Operation>().HasData(
+            new Operation { Id = ++count, Title = "Colruyt", Tricount = 4, Amount = 100, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 2 },
+            new Operation { Id = ++count, Title = "Plein essence", Tricount = 4, Amount = 75, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 1 },
+            new Operation { Id = ++count, Title = "Grosses courses LIDL", Tricount = 4, Amount = 212,74, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 3 },
+            new Operation { Id = ++count, Title = "Apéros", Tricount = 4, Amount = 31, 89745622, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 1 },
+            new Operation { Id = ++count, Title = "Boucherie", Tricount = 4, Amount = 25,5, OperationDate = DateTime.Parse("2023/10/26"), Initiator = 2 },
+            new Operation { Id = ++count, Title = "Loterie", Tricount = 4, Amount = 35, OperationDate = DateTime.Parse("2023/10/26"), Initiator = 1 },
+            new Operation { Id = ++count, Title = "Sangria", Tricount = 5, Amount = 42, OperationDate = DateTime.Parse("2023/10/16"), Initiator = 2 },
+            new Operation { Id = ++count, Title = "Jet Ski", Tricount = 5, Amount = 250, OperationDate = DateTime.Parse("2023/08/17"), Initiator = 3 },
+            new Operation { Id = ++count, Title = "PV Parking", Tricount = 5, Amount = 15,5, OperationDate = DateTime.Parse("2023/08/16"), Initiator = 3 },
+            new Operation { Id = ++count, Title = "Tickets", Tricount = 6, Amount = 220, OperationDate = DateTime.Parse("2023/06/08"), Initiator = 1 },
+            new Operation { Id = ++count, Title = "Décathlon", Tricount = 6, Amount = 199,99, OperationDate = DateTime.Parse("2023/07/01"), Initiator = 2 },
+            )
         
     }
+
+  
 
     
     // Création des tables

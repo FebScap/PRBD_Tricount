@@ -1,6 +1,7 @@
 ﻿using PRBD_Framework;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace prbd_2324_a01.Model;
 

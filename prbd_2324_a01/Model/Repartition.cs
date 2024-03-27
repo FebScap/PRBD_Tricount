@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace prbd_2324_a01.Model;
 
-[Keyless]
 public class Repartition : EntityBase<PridContext>
 {
     public int Weight { get; set; }

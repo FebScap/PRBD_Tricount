@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace prbd_2324_a01.Model;
 
-[Keyless]
 public class Subscription : EntityBase<PridContext>
 {
     [Required, ForeignKey(nameof(Tricount))]
@@ -13,6 +12,9 @@ public class Subscription : EntityBase<PridContext>
 
     [Required, ForeignKey(nameof(User))]
     public int User { get; set;}
+
+    public virtual Tricount tricount { get; set; }
+    public virtual User user { get; set; }
 
     public Subscription(int tricount, int user) {
         Tricount = tricount;

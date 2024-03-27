@@ -129,7 +129,24 @@ public class PridContext : DbContextBase
             new Repartition(11, 4, 2)
             );
 
+        int count = 0;
+        modelBuilder.Entity<Operation>().HasData(
+            new Operation { Id = ++count, Title = "Colruyt", Tricount = 4, Amount = 100, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 2 },
+            new Operation { Id = ++count, Title = "Plein essence", Tricount = 4, Amount = 75, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 1 },
+            new Operation { Id = ++count, Title = "Grosses courses LIDL", Tricount = 4, Amount = 212,74, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 3 },
+            new Operation { Id = ++count, Title = "Apéros", Tricount = 4, Amount = 31, 89745622, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 1 },
+            new Operation { Id = ++count, Title = "Boucherie", Tricount = 4, Amount = 25,5, OperationDate = DateTime.Parse("2023/10/26"), Initiator = 2 },
+            new Operation { Id = ++count, Title = "Loterie", Tricount = 4, Amount = 35, OperationDate = DateTime.Parse("2023/10/26"), Initiator = 1 },
+            new Operation { Id = ++count, Title = "Sangria", Tricount = 5, Amount = 42, OperationDate = DateTime.Parse("2023/10/16"), Initiator = 2 },
+            new Operation { Id = ++count, Title = "Jet Ski", Tricount = 5, Amount = 250, OperationDate = DateTime.Parse("2023/08/17"), Initiator = 3 },
+            new Operation { Id = ++count, Title = "PV Parking", Tricount = 5, Amount = 15,5, OperationDate = DateTime.Parse("2023/08/16"), Initiator = 3 },
+            new Operation { Id = ++count, Title = "Tickets", Tricount = 6, Amount = 220, OperationDate = DateTime.Parse("2023/06/08"), Initiator = 1 },
+            new Operation { Id = ++count, Title = "Décathlon", Tricount = 6, Amount = 199,99, OperationDate = DateTime.Parse("2023/07/01"), Initiator = 2 },
+            )
+        
     }
+
+  
 
     
     // Création des tables

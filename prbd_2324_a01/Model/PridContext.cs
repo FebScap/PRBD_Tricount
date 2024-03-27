@@ -33,8 +33,39 @@ public class PridContext : DbContextBase
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Subscription>().HasKey(k => k.tricount);
-        modelBuilder.Entity<Subscription>().HasKey(k => k.user);
+        // l'entité User participe à une relation many-to-many ...
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Tricounts)
+            .WithMany(u => u.Participants)
+            // en utilisant l'entité Subscription comme entité "association"
+            .UsingEntity<Subscription>(
+                // celle-ci étant constituée d'une relation one-to-many à partir de Tricount
+                right => right.HasOne(s => s.Tricount).WithMany().HasForeignKey(nameof(Tricount.Id))
+                    .OnDelete(DeleteBehavior.ClientCascade),
+                // et d'une autre relation one-to-many à partir de User
+                left => left.HasOne(s => s.User).WithMany().HasForeignKey(nameof(User.Id))
+                    .OnDelete(DeleteBehavior.ClientCascade),
+                joinEntity => {
+                    // en n'oubliant pas de spécifier la clé primaire composée de la table association
+                    joinEntity.HasKey(s => new { s.TricountId, s.UserId });
+                });
+
+        // l'entité User participe à une relation many-to-many ...
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Operations)
+            .WithMany(u => u.Members)
+            // en utilisant l'entité Repartition comme entité "association"
+            .UsingEntity<Repartition>(
+                // celle-ci étant constituée d'une relation one-to-many à partir de Operation
+                right => right.HasOne(s => s.Operation).WithMany().HasForeignKey(nameof(Operation.Id))
+                    .OnDelete(DeleteBehavior.ClientCascade),
+                // et d'une autre relation one-to-many à partir de User
+                left => left.HasOne(s => s.User).WithMany().HasForeignKey(nameof(User.Id))
+                    .OnDelete(DeleteBehavior.ClientCascade),
+                joinEntity => {
+                    // en n'oubliant pas de spécifier la clé primaire composée de la table association
+                    joinEntity.HasKey(s => new { s.OperationId, s.UserId });
+                });
 
         SeedData(modelBuilder);
     }
@@ -99,8 +130,8 @@ public class PridContext : DbContextBase
             new Subscription(4, 6)
             );
 
-        //Ajout des repartiotions
-        modelBuilder.Entity<Subscription>().HasData(
+        //Ajout des repartitions
+        modelBuilder.Entity<Repartition>().HasData(
             new Repartition(1, 1, 1),
             new Repartition(1, 2, 1),
             new Repartition(2, 1, 1),
@@ -129,20 +160,22 @@ public class PridContext : DbContextBase
             new Repartition(11, 4, 2)
             );
 
+
+        //Ajout des operations
         int count = 0;
         modelBuilder.Entity<Operation>().HasData(
             new Operation { Id = ++count, Title = "Colruyt", Tricount = 4, Amount = 100, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 2 },
             new Operation { Id = ++count, Title = "Plein essence", Tricount = 4, Amount = 75, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 1 },
-            new Operation { Id = ++count, Title = "Grosses courses LIDL", Tricount = 4, Amount = 212,74, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 3 },
-            new Operation { Id = ++count, Title = "Apéros", Tricount = 4, Amount = 31, 89745622, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 1 },
-            new Operation { Id = ++count, Title = "Boucherie", Tricount = 4, Amount = 25,5, OperationDate = DateTime.Parse("2023/10/26"), Initiator = 2 },
+            new Operation { Id = ++count, Title = "Grosses courses LIDL", Tricount = 4, Amount = 212.74, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 3 },
+            new Operation { Id = ++count, Title = "Apéros", Tricount = 4, Amount = 31.89745622, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 1 },
+            new Operation { Id = ++count, Title = "Boucherie", Tricount = 4, Amount = 25.5, OperationDate = DateTime.Parse("2023/10/26"), Initiator = 2 },
             new Operation { Id = ++count, Title = "Loterie", Tricount = 4, Amount = 35, OperationDate = DateTime.Parse("2023/10/26"), Initiator = 1 },
             new Operation { Id = ++count, Title = "Sangria", Tricount = 5, Amount = 42, OperationDate = DateTime.Parse("2023/10/16"), Initiator = 2 },
             new Operation { Id = ++count, Title = "Jet Ski", Tricount = 5, Amount = 250, OperationDate = DateTime.Parse("2023/08/17"), Initiator = 3 },
-            new Operation { Id = ++count, Title = "PV Parking", Tricount = 5, Amount = 15,5, OperationDate = DateTime.Parse("2023/08/16"), Initiator = 3 },
+            new Operation { Id = ++count, Title = "PV Parking", Tricount = 5, Amount = 15.5, OperationDate = DateTime.Parse("2023/08/16"), Initiator = 3 },
             new Operation { Id = ++count, Title = "Tickets", Tricount = 6, Amount = 220, OperationDate = DateTime.Parse("2023/06/08"), Initiator = 1 },
-            new Operation { Id = ++count, Title = "Décathlon", Tricount = 6, Amount = 199,99, OperationDate = DateTime.Parse("2023/07/01"), Initiator = 2 },
-            )
+            new Operation { Id = ++count, Title = "Décathlon", Tricount = 6, Amount = 199.99, OperationDate = DateTime.Parse("2023/07/01"), Initiator = 2 }
+            );
         
     }
 
@@ -152,7 +185,7 @@ public class PridContext : DbContextBase
     // Création des tables
     public DbSet<User> Users => Set<User>();
     public DbSet<Tricount> Tricounts => Set<Tricount>();
-    public DbSet<Subscription> Subscriptions => Set<Subscription>();
+    //public DbSet<Subscription> Subscriptions => Set<Subscription>();
     public DbSet<Operation> Operations => Set<Operation>();
 
     public DbSet<Repartition> Repartitions => Set<Repartition>();

@@ -17,6 +17,8 @@ public class Operation : EntityBase<PridContext>
     [Required, ForeignKey(nameof(User))]
     public int Initiator {  get; set; }
 
+    public virtual ICollection<User> Members { get; set; } = new HashSet<User>();
+
     public Operation(string title, int tricount, double amount, int initiator) {
         Title = title;
         Tricount = tricount;

@@ -15,6 +15,8 @@ public class Tricount : EntityBase<PridContext>
     public int Creator {  get; set; }
     public int Id { get; set; }
 
+    public virtual ICollection<User> Participants { get; set; } = new HashSet<User>();
+
     public Tricount(string title, string description, int creator) {
         Title = title;
         Description = description;

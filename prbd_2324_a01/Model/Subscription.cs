@@ -8,17 +8,17 @@ namespace prbd_2324_a01.Model;
 public class Subscription : EntityBase<PridContext>
 {
     [Required, ForeignKey(nameof(Tricount))]
-    public int Tricount { get; set; }
+    public int TricountId { get; set; }
 
     [Required, ForeignKey(nameof(User))]
-    public int User { get; set;}
+    public int UserId { get; set;}
 
-    public virtual Tricount tricount { get; set; }
-    public virtual User user { get; set; }
+    public virtual Tricount Tricount { get; set; }
+    public virtual User User { get; set; }
 
     public Subscription(int tricount, int user) {
-        Tricount = tricount;
-        User = user;
+        TricountId = tricount;
+        UserId = user;
     }
 
     public Subscription() { }

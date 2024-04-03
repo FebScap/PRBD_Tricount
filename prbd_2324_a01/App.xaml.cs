@@ -34,7 +34,7 @@ public partial class App {
         // Cold start
         Console.Write("Cold starting database... ");
         Context.Users.Find(1);
-        Console.WriteLine("done");
+        Console.WriteLine("done");        
     }
 
     protected override void OnRefreshData() {

@@ -7,4 +7,8 @@ public partial class MainView : WindowBase
     public MainView() {
         InitializeComponent();
     }
+
+    private void MenuLogout_Click(object sender, System.Windows.RoutedEventArgs e) {
+        //TODO : NotifyColleagues(App.Messages.MSG_LOGOUT);
+    }
 }

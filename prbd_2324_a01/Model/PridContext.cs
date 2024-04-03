@@ -39,10 +39,10 @@ public class PridContext : DbContextBase
             // en utilisant l'entité Subscription comme entité "association"
             .UsingEntity<Subscription>(
                 // celle-ci étant constituée d'une relation one-to-many à partir de Tricount
-                right => right.HasOne(s => s.Tricount).WithMany().HasForeignKey(nameof(Tricount.Id))
+                right => right.HasOne(s => s.Tricount).WithMany().HasForeignKey(nameof(Subscription.TricountId))
                     .OnDelete(DeleteBehavior.ClientCascade),
                 // et d'une autre relation one-to-many à partir de User
-                left => left.HasOne(s => s.User).WithMany().HasForeignKey(nameof(User.Id))
+                left => left.HasOne(s => s.User).WithMany().HasForeignKey(nameof(Subscription.UserId))
                     .OnDelete(DeleteBehavior.ClientCascade),
                 joinEntity => {
                     // en n'oubliant pas de spécifier la clé primaire composée de la table association

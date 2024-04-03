@@ -17,9 +17,9 @@ public class Subscription : EntityBase<PridContext>
     public int UserId { get; set;}
     public virtual User User { get; set; }
 
-    public Subscription(int tricount, int user) {
-        TricountId = tricount;
+    public Subscription(int user, int tricount) {
         UserId = user;
+        TricountId = tricount;
     }
 
     public Subscription() { }

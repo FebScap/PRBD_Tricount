@@ -2,23 +2,24 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using Azure;
 
 namespace prbd_2324_a01.Model;
 
 public class Subscription : EntityBase<PridContext>
 {
-    [Required, ForeignKey(nameof(Tricount))]
+    [ForeignKey(nameof(Tricount))]
     public int TricountId { get; set; }
-
-    [Required, ForeignKey(nameof(User))]
-    public int UserId { get; set;}
-
     public virtual Tricount Tricount { get; set; }
+
+
+    [ForeignKey(nameof(User))]
+    public int UserId { get; set;}
     public virtual User User { get; set; }
 
-    public Subscription(int user, int tricount) {
-        UserId = user;
+    public Subscription(int tricount, int user) {
         TricountId = tricount;
+        UserId = user;
     }
 
     public Subscription() { }

@@ -9,8 +9,10 @@ public class User : EntityBase<PridContext>
     public string HashedPassword { get; set; }
     public string FullName { get; set; }
     public int Role {  get; set; }
+
+
     public virtual ICollection<Tricount> Tricounts { get; set; } = new HashSet<Tricount>();
-    public virtual ICollection<Operation> Operations { get; set; } = new HashSet<Operation>();
+    public virtual ICollection<Repartition> Repartitions { get; set; } = new HashSet<Repartition>();
 
     public User(string mail, string hashedPassword, string fullName, int role) {
         Mail = mail;

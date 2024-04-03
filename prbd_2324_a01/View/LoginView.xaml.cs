@@ -1,9 +1,9 @@
-using System.Windows;
+﻿using System.Windows;
 using PRBD_Framework;
 
 namespace prbd_2324_a01.View;
 
-public partial class LoginView : WindowBase
+public partial class LoginView
 {
     public LoginView() {
         InitializeComponent();

@@ -5,11 +5,10 @@
              xmlns:m="clr-namespace:prbd_2324_a01.Model"
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
              StartupUri="View/LoginView.xaml">
-	<Application.Resources>
+    <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/PRBD_Framework;component/Styles/PRBD_Styles.xaml"/>
-                <ResourceDictionary Source="Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

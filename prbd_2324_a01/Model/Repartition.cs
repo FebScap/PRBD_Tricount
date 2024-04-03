@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace prbd_2324_a01.Model;
 
-[PrimaryKey(nameof(OperationId), nameof(UserId))]
 public class Repartition : EntityBase<PridContext>
 {
     public int Weight { get; set; }
@@ -19,7 +18,7 @@ public class Repartition : EntityBase<PridContext>
     public virtual Operation Operation { get; set; }
     public virtual User User { get; set; }
 
-    public Repartition(int operation, int user, int weight) {
+    public Repartition(int weight, int operation, int user) {
         Weight = weight;
         OperationId = operation;
         UserId = user;

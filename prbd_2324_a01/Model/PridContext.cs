@@ -32,6 +32,7 @@ public class PridContext : DbContextBase
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
+
         // l'entité User participe à une relation many-to-many ...
         modelBuilder.Entity<User>()
             .HasMany(u => u.Tricounts)
@@ -49,25 +50,22 @@ public class PridContext : DbContextBase
                     joinEntity.HasKey(s => new { s.TricountId, s.UserId });
                 });
 
-        // l'entité User participe à une relation one-to-many ...
+        // l'entité User participe à une relation many-to-many ...
         modelBuilder.Entity<User>()
-            // avec, du côté many, la propriété Repartitions ...
-            .HasMany(u => u.Repartitions)
-            // avec, du côté one, la propriété User ...
-            .WithOne(repartition => repartition.User)
-            // et pour laquelle on active le delete en cascade du côté client (EF)
-            .OnDelete(DeleteBehavior.ClientCascade);
-
-        // l'entité Operation participe à une relation one-to-many ...
-        modelBuilder.Entity<Operation>()
-            // avec, du côté many, la propriété Repartitions ...
-            .HasMany(o => o.Repartitions)
-            // avec, du côté one, la propriété User ...
-            .WithOne(operation => operation.Operation)
-            // et pour laquelle on active le delete en cascade du côté client (EF)
-            .OnDelete(DeleteBehavior.ClientCascade);
-
-        //modelBuilder.Entity<Repartition>().HasKey(r => new { r.OperationId, r.UserId });
+            .HasMany(u => u.Operations)
+            .WithMany(u => u.Members)
+            // en utilisant l'entité Repartition comme entité "association"
+            .UsingEntity<Repartition>(
+                // celle-ci étant constituée d'une relation one-to-many à partir de Operation
+                right => right.HasOne(s => s.Operation).WithMany().HasForeignKey(nameof(Operation.Id))
+                    .OnDelete(DeleteBehavior.ClientCascade),
+                // et d'une autre relation one-to-many à partir de User
+                left => left.HasOne(s => s.User).WithMany().HasForeignKey(nameof(User.Id))
+                    .OnDelete(DeleteBehavior.ClientCascade),
+                joinEntity => {
+                    // en n'oubliant pas de spécifier la clé primaire composée de la table association
+                    joinEntity.HasKey(s => new { s.OperationId, s.UserId });
+                });
 
         SeedData(modelBuilder);
     }
@@ -82,35 +80,14 @@ public class PridContext : DbContextBase
 
     private void SeedData(ModelBuilder modelBuilder) {
         //Ajout des utilisateurs
-        int count = 0;
         modelBuilder.Entity<User>().HasData(
-            new User { 
-                Id = ++count, Mail = "boverhaegen@epfc.eu",
-                HashedPassword = "3D4AEC0A9B43782133B8120B2FDD8C6104ABB513FE0CDCD0D1D4D791AA42E338:C217604FDAEA7291C7BA5D1D525815E4:100000:SHA256",
-                FullName = "Boris", Role = 0 
-            },
-            new User {
-                Id = ++count, Mail = "bepenelle@epfc.eu",
-                HashedPassword = "9E58D87797C6795D294E6762B6C05116D075BC18445AD4078C25674809DB57EF:C91E0B85B7264877C0424D52494D6296:100000:SHA256",
-                FullName = "Benoît", Role = 0 
-            },
-            new User {
-                Id = ++count, Mail = "xapigeolet@epfc.eu",
-                HashedPassword = "5B979AB86EC73B0996F439D0BC3947ECCFA0A41310C77533EA36CB409DBB1243:0CF43009110DE4B4AA6D4E749F622755:100000:SHA256",
-                FullName = "Xavier", Role = 0
-            },
-            new User {
-                Id = ++count, Mail = "mamichel@epfc.eu",
-                HashedPassword = "955F147CE3473774E35EE58F4233AA84AE9118C6ECD4699DD788B8D588238034:5514D1DD0A97E9BA7FE4C0B5A4E89351:100000:SHA256",
-                FullName = "Marc", Role = 0
-            },
-            new User {
-                Id = ++count, Mail = "admin@epfc.eu",
-                HashedPassword = "C9949A02A5DFBE50F1DA289DC162E3C97443AB09CE6F6EB1FD0C9D51B5241BBD:5533437973C5BC6459DB687CA5BDE76C:100000:SHA256",
-                FullName = "Administrator", Role = 1
-            });
-        
-         
+                new User("boverhaegen@epfc.eu", "3D4AEC0A9B43782133B8120B2FDD8C6104ABB513FE0CDCD0D1D4D791AA42E338:C217604FDAEA7291C7BA5D1D525815E4:100000:SHA256", "Boris", 0),
+                new User("bepenelle@epfc.eu", "9E58D87797C6795D294E6762B6C05116D075BC18445AD4078C25674809DB57EF:C91E0B85B7264877C0424D52494D6296:100000:SHA256", "Benoît", 0),
+                new User("xapigeolet@epfc.eu", "5B979AB86EC73B0996F439D0BC3947ECCFA0A41310C77533EA36CB409DBB1243:0CF43009110DE4B4AA6D4E749F622755:100000:SHA256", "Xavier", 0),
+                new User("mamichel@epfc.eu", "955F147CE3473774E35EE58F4233AA84AE9118C6ECD4699DD788B8D588238034:5514D1DD0A97E9BA7FE4C0B5A4E89351:100000:SHA256", "Marc", 0),
+                new User("admin@epfc.eu", "C9949A02A5DFBE50F1DA289DC162E3C97443AB09CE6F6EB1FD0C9D51B5241BBD:5533437973C5BC6459DB687CA5BDE76C:100000:SHA256", "Administrator", 1)
+            );
+
         //Ajout des tricounts
         modelBuilder.Entity<Tricount>().HasData(
             new Tricount {
@@ -135,7 +112,6 @@ public class PridContext : DbContextBase
             }
             );
 
-      
         //Ajout des subscriptions
         modelBuilder.Entity<Subscription>().HasData(
             new Subscription(1, 1),
@@ -153,7 +129,6 @@ public class PridContext : DbContextBase
             new Subscription(4, 5),
             new Subscription(4, 6)
             );
-        
 
         //Ajout des repartitions
         modelBuilder.Entity<Repartition>().HasData(
@@ -184,11 +159,10 @@ public class PridContext : DbContextBase
             new Repartition(11, 2, 2),
             new Repartition(11, 4, 2)
             );
-       
 
 
         //Ajout des operations
-        count = 0;
+        int count = 0;
         modelBuilder.Entity<Operation>().HasData(
             new Operation { Id = ++count, Title = "Colruyt", Tricount = 4, Amount = 100, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 2 },
             new Operation { Id = ++count, Title = "Plein essence", Tricount = 4, Amount = 75, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 1 },
@@ -226,7 +200,8 @@ public class PridContext : DbContextBase
     // Création des tables
     public DbSet<User> Users => Set<User>();
     public DbSet<Tricount> Tricounts => Set<Tricount>();
-    public DbSet<Subscription> Subscriptions => Set<Subscription>();
+    //public DbSet<Subscription> Subscriptions => Set<Subscription>();
     public DbSet<Operation> Operations => Set<Operation>();
+
     public DbSet<Repartition> Repartitions => Set<Repartition>();
 }

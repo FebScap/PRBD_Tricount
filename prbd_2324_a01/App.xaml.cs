@@ -2,10 +2,11 @@
 using prbd_2324_a01.ViewModel;
 using System.Windows;
 using System.Globalization;
+using PRBD_Framework;
 
 namespace prbd_2324_a01;
 
-public partial class App {
+public partial class App : ApplicationBase<User, PridContext> {
     public App() {
         var ci = new CultureInfo("fr-BE") {
             DateTimeFormat = {

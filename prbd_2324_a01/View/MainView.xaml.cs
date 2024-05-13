@@ -1,4 +1,5 @@
-﻿using PRBD_Framework;
+﻿using prbd_2324_a01.Model;
+using PRBD_Framework;
 
 namespace prbd_2324_a01.View;
 

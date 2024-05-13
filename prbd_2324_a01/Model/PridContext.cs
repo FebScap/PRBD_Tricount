@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Logging;
 using PRBD_Framework;
 using System.Configuration;
-using System.Data;
 
 namespace prbd_2324_a01.Model;
 

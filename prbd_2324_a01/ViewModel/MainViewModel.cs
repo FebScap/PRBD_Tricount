@@ -3,7 +3,9 @@ using PRBD_Framework;
 
 namespace prbd_2324_a01.ViewModel;
 
-public class MainViewModel : PRBD_Framework.ViewModelBase<User, PridContext>
+public class MainViewModel : ViewModelBase<User, PridContext>
 {
-    public string Title => "prbd_2324_a01";
+    public static string Title {
+        get => $"My Tricount ({CurrentUser?.Mail})";
+    }
 }

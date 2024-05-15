@@ -6,10 +6,24 @@
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
               xmlns:vm="clr-namespace:prbd_2324_a01.ViewModel"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance Type=vm:TricountCardViewModel, IsDesignTimeCreatable=False}"
-             d:DesignHeight="80" d:DesignWidth="80">
-    
-    <StackPanel>
-        <TextBlock FontSize="14" FontWeight="Bold" Width="80" TextAlignment="Center" Text="{Binding Title}" />
-    </StackPanel>
+             d:DataContext="{d:DesignInstance Type=vm:TricountCardViewModel, IsDesignTimeCreatable=False}" Height="115" Width="100" Background="{Binding BgColor}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <TextBox Grid.Row="1" FontSize="14" FontWeight="Bold" TextAlignment="Center" Text="{Binding Title}" />
+        <TextBlock Grid.Row="2" TextWrapping="Wrap">
+            <Run>Created by</Run>
+            <Run Text="{Binding Creator}" FontWeight="Bold" />
+            <LineBreak/>
+            <Run>on</Run>
+            <Run Text="{Binding CreationDate}" />
+        </TextBlock>
+        <TextBox Grid.Row="3" FontSize="9" TextAlignment="Center" Text="{Binding LastOperation}"/>
+        <TextBox Grid.Row="4" FontSize="9" TextAlignment="Center" Text="{Binding Members}"/>
+    </Grid>
 </f:UserControlBase>

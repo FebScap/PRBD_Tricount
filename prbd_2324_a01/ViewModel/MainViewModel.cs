@@ -8,4 +8,7 @@ public class MainViewModel : ViewModelBase<User, PridContext>
     public static string Title {
         get => $"My Tricount ({CurrentUser?.Mail})";
     }
+
+    public MainViewModel() {
+    }
 }

@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Login" WindowStartupLocation="CenterScreen"
         FocusManager.FocusedElement="{Binding ElementName=txtEmail}" ResizeMode="NoResize"
-        Width="250" Height="200"
+        Width="250" Height="350"
         SizeToContent="WidthAndHeight" >
     <Window.DataContext>
         <vm:LoginViewModel x:Name="vm"/>
@@ -20,6 +20,10 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -48,6 +52,31 @@
                 <Hyperlink><Run Text="here"/></Hyperlink>
                 <Run Text="to sign-up."/>
             </TextBlock>
+        </DockPanel>
+        <DockPanel Grid.Row="4" Grid.ColumnSpan="2">
+            <TextBlock Height="auto" FontWeight="Bold" Foreground="Red" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Width="220" Margin="10" >
+        <Run Text="FOR TEST/DEBUG PURPOSE"/>
+            </TextBlock>
+        </DockPanel>
+        <DockPanel Grid.Row="5" Grid.ColumnSpan="2" Margin="5">
+            <Button x:Name="btnBenoit" Content="Login as Benoît (User)" 
+            HorizontalAlignment="Center" VerticalAlignment="Top" Width="210"  Margin="0,0,10,0"
+             Command="{Binding BenoitCommand}"/>
+        </DockPanel>
+        <DockPanel Grid.Row="6" Grid.ColumnSpan="2" Margin="5">
+            <Button x:Name="btnBoris" Content="Login as Boris (User)" 
+             HorizontalAlignment="Center" VerticalAlignment="Top" Width="210" Margin="0,0,10,0"
+             Command="{Binding BorisCommand}"/>
+        </DockPanel>
+        <DockPanel Grid.Row="7" Grid.ColumnSpan="2" Margin="5">
+            <Button x:Name="btnXavier" Content="Login as Xavier (User)" 
+             HorizontalAlignment="Center" VerticalAlignment="Top" Width="210" Margin="0,0,10,0"
+             Command="{Binding XavierCommand}"/>  
+        </DockPanel>
+        <DockPanel Grid.Row="8" Grid.ColumnSpan="2" Margin="5">
+            <Button x:Name="btnAdmin" Content="Login as Admin (Admin)" 
+             HorizontalAlignment="Center" VerticalAlignment="Top" Width="210" Margin="0,0,10,0"
+             Command="{Binding AdminCommand}"/>
         </DockPanel>
     </Grid>
 </f:WindowBase>

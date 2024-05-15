@@ -1,8 +1,8 @@
-using System;
-using System.Net.Mail;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 using prbd_2324_a01.Model;
 using PRBD_Framework;
+using prbd_2324_a01.Utils;
 
 namespace prbd_2324_a01.ViewModel;
 
@@ -71,7 +71,7 @@ public class LoginViewModel : ViewModelBase<User, PridContext>
 
         if (string.IsNullOrEmpty(Mail))
             AddError(nameof(Mail), "required");
-        else if (!IsValidMail(Mail))
+        else if (!Validations.Mail(Mail))
             AddError(nameof(Mail), "must be valid");
         else if (user == null)
             AddError(nameof(Mail), "does not exist");
@@ -82,18 +82,6 @@ public class LoginViewModel : ViewModelBase<User, PridContext>
 
         return !HasErrors;
     }
-
-    private static bool IsValidMail(string email) {
-        var valid = true;
-
-        try {
-            var emailAddress = new MailAddress(email);
-        } catch {
-            valid = false;
-        }
-        return valid;
-    }
-
 
     protected override void OnRefreshData() {
     }

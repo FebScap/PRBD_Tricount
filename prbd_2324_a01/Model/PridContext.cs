@@ -85,7 +85,7 @@ public class PridContext : DbContextBase
         modelBuilder.Entity<User>().HasData(
             new User { 
                 Id = ++count, Mail = "boverhaegen@epfc.eu",
-                HashedPassword = SecretHasher.Hash("Password1,"),
+                HashedPassword = "3D4AEC0A9B43782133B8120B2FDD8C6104ABB513FE0CDCD0D1D4D791AA42E338:C217604FDAEA7291C7BA5D1D525815E4:100000:SHA256",
                 FullName = "Boris", Role = 0 
             },
             new User {

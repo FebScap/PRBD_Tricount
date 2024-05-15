@@ -1,8 +1,9 @@
 ﻿using prbd_2324_a01.Model;
+using PRBD_Framework;
 
 namespace prbd_2324_a01.ViewModel;
 
-public class TricountCardViewModel {
+public class TricountCardViewModel : ViewModelBase<User, PridContext> {
     private readonly Tricount _tricount;
 
     public Tricount Tricount {

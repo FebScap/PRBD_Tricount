@@ -9,12 +9,7 @@
              d:DataContext="{d:DesignInstance Type=vm:TricountCardViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="80" d:DesignWidth="80">
     
-    
-    <UserControl.Resources>
-        <BitmapImage x:Key="UnknownUser" UriSource="/images/unknown-user.jpg"/>
-    </UserControl.Resources>
     <StackPanel>
-        <Image Width="80" Height="80" Source="{Binding PicturePath, Converter={f:UriToCachedImageConverter}, TargetNullValue={StaticResource UnknownUser}}" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" />
-        <TextBlock FontSize="14" FontWeight="Bold" Width="80" TextAlignment="Center" Text="{Binding Pseudo}" />
+        <TextBlock FontSize="14" FontWeight="Bold" Width="80" TextAlignment="Center" Text="{Binding Title}" />
     </StackPanel>
 </f:UserControlBase>

@@ -10,7 +10,9 @@ public partial class App : ApplicationBase<User, PridContext> {
     public enum Messages
     {
         MSG_LOGIN,
-        MSG_LOGOUT
+        MSG_LOGOUT,
+        MSG_NEW_TRICOUNT,
+        MSG_DISPLAY_TRICOUNT
     }
 
     public App() {

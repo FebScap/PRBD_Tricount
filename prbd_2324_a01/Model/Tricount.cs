@@ -24,4 +24,15 @@ public class Tricount : EntityBase<PridContext>
     }
 
     public Tricount() { }
+
+    public static IQueryable<Tricount> GetAllById(int id) {
+        return Context.Tricounts.Where(t => t.Creator == id);
+    }
+
+    public static IQueryable<Tricount> GetFilteredById(int id, string Filter) {
+        var filtered = from t in Context.Tricounts
+                       where t.Title.Contains(Filter) || t.Description.Contains(Filter)
+                       select t;
+        return filtered;
+    }
 }

@@ -32,6 +32,14 @@ public class Subscription : EntityBase<PridContext>
         return tricounts;
     }
 
+    public static List<Tricount> GetAllTricountByUserIdFiltered(int id, string filter) {
+        List<Tricount> tricounts = new List<Tricount>();
+        foreach (Subscription sub in Context.Subscriptions.Where(s => s.UserId == id && (s.Tricount.Title.Contains(filter) || s.Tricount.Description.Contains(filter)))) {
+            tricounts.Add(Context.Tricounts.Find(sub.TricountId));
+        }
+        return tricounts;
+    }
+
     public static List<User> GetAllUserByTricountIdExeptCurent(int id, User current) {
         List<User> users = new List<User>();
         foreach (Subscription sub in Context.Subscriptions.Where(s => s.TricountId == id)) {

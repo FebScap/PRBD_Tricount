@@ -22,7 +22,7 @@ public class TricountsViewModel : ViewModelBase<User, PridContext>
 
     public ICommand ClearFilter { get; set; }
     public ICommand NewTricount { get; set; }
-    public ICommand DisplayTricountDetails { get; set; }
+    public ICommand DisplayTricountDetail { get; set; }
 
     public TricountsViewModel() : base() {
         OnRefreshData();
@@ -33,14 +33,19 @@ public class TricountsViewModel : ViewModelBase<User, PridContext>
             NotifyColleagues(App.Messages.MSG_NEW_TRICOUNT, new Tricount());
         });
 
-        DisplayTricountDetails = new RelayCommand<TricountCardViewModel>(vm => {
+        DisplayTricountDetail = new RelayCommand<TricountCardViewModel>(vm => {
             NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, vm.Tricount);
         });
     }
 
-    protected override void OnRefreshData() {   
-        IQueryable<Tricount> tricounts = string.IsNullOrEmpty(Filter) ? Tricount.GetAllById(CurrentUser.Id) : Tricount.GetFilteredById(CurrentUser.Id, Filter);
-
-        Tricounts = new ObservableCollection<TricountCardViewModel>(tricounts.Select(t => new TricountCardViewModel(t)));
+    protected override void OnRefreshData() {
+        if (CurrentUser.Id != 5) {
+            List<Tricount> tricounts = string.IsNullOrEmpty(Filter) ? Subscription.GetAllTricountByUserId(CurrentUser.Id) : Subscription.GetAllTricountByUserIdFiltered(CurrentUser.Id, Filter);
+            Tricounts = new ObservableCollection<TricountCardViewModel>(tricounts.Select(t => new TricountCardViewModel(t)));
+        } else {
+            IQueryable<Tricount> tricounts = string.IsNullOrEmpty(Filter) ? Tricount.GetAll() : Tricount.GetAllFiltered(Filter);
+            Tricounts = new ObservableCollection<TricountCardViewModel>(tricounts.Select(t => new TricountCardViewModel(t)));
+        }
+        
     }
 }

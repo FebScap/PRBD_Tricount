@@ -7,7 +7,7 @@
               xmlns:vm="clr-namespace:prbd_2324_a01.ViewModel"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:TricountCardViewModel, IsDesignTimeCreatable=False}">
-    <Border BorderBrush="Transparent" CornerRadius="15"  Height="260" Width="250" Padding="10" Margin="3" Background="{Binding BgColor}">
+    <Border BorderBrush="Transparent" CornerRadius="15"  Height="260" Width="250" Padding="13" Background="{Binding BgColor}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>

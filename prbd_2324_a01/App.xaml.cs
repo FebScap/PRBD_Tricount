@@ -12,7 +12,8 @@ public partial class App : ApplicationBase<User, PridContext> {
         MSG_LOGIN,
         MSG_LOGOUT,
         MSG_NEW_TRICOUNT,
-        MSG_DISPLAY_TRICOUNT
+        MSG_DISPLAY_TRICOUNT,
+        MSG_CLOSE_TAB
     }
 
     public App() {

@@ -11,7 +11,8 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
         get => _tricount;
     }
 
-    public string BgColor => GetBalanceColor();
+    public string BgColor => GetBackgroundColor();
+    public string BalanceColor => "Black";
     public string Title => Tricount.Title;
     public string Description => GetDescription();
     public string Creator => Context.Users.Find(Tricount.Creator).FullName;
@@ -19,14 +20,16 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
     public string LastOperation => GetLastOperationDate();
     public string FriendsNumber => GetFriendsNumberToString();
     public string HasOperations => OperationDateVisibility();
-
     public string NumberOfOperations => NumberOfOperationsToString();
+    public int TotalExpenses => 0;
+    public int MyExpenses => 0;
+    public int MyBalance => 0;
 
     public TricountCardViewModel(Tricount tricount) {
         _tricount = tricount;
     }
 
-    private string GetBalanceColor() {
+    private string GetBackgroundColor() {
         if (Tricount.Title.Contains("Vacances")) {
             return "LightPink";
         } else if (Tricount.Title.Contains("Resto")) {

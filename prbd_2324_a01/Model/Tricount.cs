@@ -35,4 +35,20 @@ public class Tricount : EntityBase<PridContext>
                        select t;
         return filtered;
     }
+
+    public double GetTotalExpenses() {
+        double totalExpenses = 0;
+        foreach (Operation o in Operation.GetAllByTricountId(this.Id)) {
+            totalExpenses += o.Amount;
+        }
+        return Math.Round(totalExpenses, 2);
+    }
+
+    internal double GetMyExpenses(int id) {
+        double myExpenses = 0;
+        foreach (Operation o in Operation.GetAllByTricountId(this.Id)) {
+            myExpenses += o.Amount;
+        }
+        return Math.Round(myExpenses, 2);
+    }
 }

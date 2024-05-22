@@ -21,9 +21,9 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
     public string FriendsNumber => GetFriendsNumberToString();
     public string HasOperations => OperationDateVisibility();
     public string NumberOfOperations => NumberOfOperationsToString();
-    public int TotalExpenses => 0;
-    public int MyExpenses => 0;
-    public int MyBalance => 0;
+    public string TotalExpenses => Tricount.GetTotalExpenses() + " €";
+    public string MyExpenses => Tricount.GetMyExpenses(CurrentUser.Id) + " €";
+    public string MyBalance => 0 + " €";
 
     public TricountCardViewModel(Tricount tricount) {
         _tricount = tricount;

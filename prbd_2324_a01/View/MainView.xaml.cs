@@ -1,5 +1,6 @@
 ﻿using prbd_2324_a01.Model;
 using PRBD_Framework;
+using System.Windows.Controls;
 
 namespace prbd_2324_a01.View;
 
@@ -23,6 +24,7 @@ public partial class MainView : WindowBase
     }
 
     private void DoDisplayTricount(Tricount tricount, bool isNew) {
+        Console.Write(tricount.Title.ToString());
         if (tricount != null)
             OpenTab(isNew ? "<New Tricount>" : tricount.Title, () => new TricountDetailView(tricount, isNew));
     }
@@ -33,6 +35,7 @@ public partial class MainView : WindowBase
             tabControl.Add(createView(), header, header);
         else
             tabControl.SetFocus(tab);
+        Console.Write(tab?.Tag?.ToString());
     }
 
     private void MenuLogout_Click(object sender, System.Windows.RoutedEventArgs e) {

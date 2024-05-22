@@ -40,17 +40,17 @@
                 <TextBlock FontSize="14" TextAlignment="Center" Text="{Binding FriendsNumber}"/>
             </DockPanel>
             <TextBlock Grid.Row="6" FontSize="14" TextAlignment="Center" Text="{Binding NumberOfOperations}"/>
-            <DockPanel Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0">
+            <DockPanel Grid.Row="7" Visibility="{Binding HasOperations}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0">
                 <TextBlock FontSize="16" TextAlignment="Left" Text="Total Expenses: "/>
                 <TextBlock TextAlignment="Center"/>
                 <TextBlock FontSize="16" TextAlignment="Right" Text="{Binding TotalExpenses}"/>
             </DockPanel>
-            <DockPanel Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0">
+            <DockPanel Grid.Row="8" Visibility="{Binding HasOperations}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0">
                 <TextBlock FontSize="16" TextAlignment="Left" Text="My Expenses: "/>
                 <TextBlock TextAlignment="Center"/>
                 <TextBlock FontSize="16" TextAlignment="Right" Text="{Binding MyExpenses}"/>
             </DockPanel>
-            <DockPanel Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0">
+            <DockPanel Grid.Row="9" Visibility="{Binding HasOperations}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0">
                 <TextBlock FontSize="16" FontWeight="Bold" TextAlignment="Left" Text="My Balance: "/>
                 <TextBlock TextAlignment="Center"/>
                 <TextBlock FontSize="16" FontWeight="Bold" Foreground="{Binding BalanceColor}" TextAlignment="Right" Text="{Binding MyBalance}"/>

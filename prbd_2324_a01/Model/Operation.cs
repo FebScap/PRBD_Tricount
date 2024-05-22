@@ -27,4 +27,11 @@ public class Operation : EntityBase<PridContext>
     }
 
     public Operation() { }
+    public static IQueryable<Operation> GetAllByTricountId(int id) {
+        return Context.Operations.Where(o => o.Tricount == id).OrderByDescending(o => o.OperationDate);
+    }
+
+    public static Operation GetLastOperationByTricountId(int id) {
+        return GetAllByTricountId(id).FirstOrDefault();
+    }
 }

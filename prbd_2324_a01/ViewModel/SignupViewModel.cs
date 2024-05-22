@@ -6,16 +6,10 @@ using prbd_2324_a01.Utils;
 
 namespace prbd_2324_a01.ViewModel;
 
-public class LoginViewModel : ViewModelBase<User, PridContext>
+public class SignupViewModel : ViewModelBase<User, PridContext>
 {
     public ICommand LoginCommand { get; set; }
-    public ICommand BenoitCommand { get; set; }
-    public ICommand BorisCommand { get; set; }
-    public ICommand XavierCommand { get; set; }
-    public ICommand AdminCommand { get; set; }
-    public ICommand SignupCommand { get; set; }
-
-
+    
     private string _mail;
 
     public string Mail {
@@ -30,32 +24,10 @@ public class LoginViewModel : ViewModelBase<User, PridContext>
         set => SetProperty(ref _password, value, () => Validate());
     }
 
-    public LoginViewModel() {
+    public SignupViewModel() {
         LoginCommand = new RelayCommand(LoginAction,
             () => { return _mail != null && _password != null && !HasErrors; });
 
-        BenoitCommand = new RelayCommand(LogBenoit);
-        BorisCommand = new RelayCommand(LogBoris);
-        XavierCommand = new RelayCommand(LogXavier);
-        AdminCommand = new RelayCommand(LogAdmin);
-        SignupCommand = new RelayCommand(Signup);
-    }
-
-
-    private void LogBenoit() {
-        NotifyColleagues(App.Messages.MSG_LOGIN, Context.Users.Find(2));
-    }
-    private void LogBoris() {
-        NotifyColleagues(App.Messages.MSG_LOGIN, Context.Users.Find(1));
-    }
-    private void LogXavier() {
-        NotifyColleagues(App.Messages.MSG_LOGIN, Context.Users.Find(3));
-    }
-    private void LogAdmin() {
-        NotifyColleagues(App.Messages.MSG_LOGIN, Context.Users.Find(5));
-    }
-    private void Signup() {
-        NotifyColleagues(App.Messages.MSG_SIGNUP);
     }
 
     private void LoginAction() {

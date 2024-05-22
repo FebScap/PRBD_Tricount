@@ -24,4 +24,31 @@ public class Tricount : EntityBase<PridContext>
     }
 
     public Tricount() { }
+
+    public static IQueryable<Tricount> GetAll() {
+        return Context.Tricounts;
+    }
+
+    public static IQueryable<Tricount> GetAllFiltered(string Filter) {
+        var filtered = from t in Context.Tricounts
+                       where t.Title.Contains(Filter) || t.Description.Contains(Filter)
+                       select t;
+        return filtered;
+    }
+
+    public double GetTotalExpenses() {
+        double totalExpenses = 0;
+        foreach (Operation o in Operation.GetAllByTricountId(this.Id)) {
+            totalExpenses += o.Amount;
+        }
+        return Math.Round(totalExpenses, 2);
+    }
+
+    internal double GetMyExpenses(int id) {
+        double myExpenses = 0;
+        foreach (Operation o in Operation.GetAllByTricountId(this.Id)) {
+            myExpenses += o.Amount;
+        }
+        return Math.Round(myExpenses, 2);
+    }
 }

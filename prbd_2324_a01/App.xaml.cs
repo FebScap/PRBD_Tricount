@@ -2,10 +2,20 @@
 using prbd_2324_a01.ViewModel;
 using System.Windows;
 using System.Globalization;
+using PRBD_Framework;
 
 namespace prbd_2324_a01;
 
-public partial class App {
+public partial class App : ApplicationBase<User, PridContext> {
+    public enum Messages
+    {
+        MSG_LOGIN,
+        MSG_LOGOUT,
+        MSG_NEW_TRICOUNT,
+        MSG_DISPLAY_TRICOUNT,
+        MSG_CLOSE_TAB
+    }
+
     public App() {
         var ci = new CultureInfo("fr-BE") {
             DateTimeFormat = {
@@ -23,7 +33,15 @@ public partial class App {
         PrepareDatabase();
         TestQueries();
 
-        NavigateTo<MainViewModel, User, PridContext>();
+        Register<User>(this, Messages.MSG_LOGIN, user => {
+            Login(user);
+            NavigateTo<MainViewModel, User, PridContext>();
+        });
+
+        Register(this, Messages.MSG_LOGOUT, () => {
+            Logout();
+            NavigateTo<LoginViewModel, User, PridContext>();
+        });
     }
 
     private static void PrepareDatabase() {

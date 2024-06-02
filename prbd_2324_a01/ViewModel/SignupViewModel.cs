@@ -71,7 +71,7 @@ public class SignupViewModel : ViewModelBase<User, PridContext>
     }
 
     public bool ValidateFullname() {
-        ClearErrors(nameof(Fullname));
+        ClearErrors();
 
         if (string.IsNullOrEmpty(Fullname))
             AddError(nameof(Fullname), "required");
@@ -82,7 +82,7 @@ public class SignupViewModel : ViewModelBase<User, PridContext>
     }
 
     public bool ValidatePassword() {
-        ClearErrors(nameof(Password));
+        ClearErrors();
 
         if (string.IsNullOrEmpty(Password))
             AddError(nameof(Password), "required");
@@ -97,7 +97,7 @@ public class SignupViewModel : ViewModelBase<User, PridContext>
     }
 
     public bool ValidatePasswordConfirm() {
-        ClearErrors(nameof(PasswordConfirm));
+        ClearErrors();
 
         if (string.IsNullOrEmpty(PasswordConfirm))
             AddError(nameof(PasswordConfirm), "required");

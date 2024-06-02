@@ -35,16 +35,16 @@
                 Text="{Binding Mail, UpdateSourceTrigger=PropertyChanged}" />
         <Label x:Name="labelFullname" Grid.Row="1" Content="Fullname" VerticalAlignment="Top" Padding="5" />
         <TextBox x:Name="txtFullname" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"
-        Text="{Binding Mail, UpdateSourceTrigger=PropertyChanged}" />
+        Text="{Binding Fullname, UpdateSourceTrigger=PropertyChanged}" />
         <Label Content="Password" Grid.Row="2" VerticalAlignment="Top" Padding="5"/>
         <PasswordBox x:Name="txtPassword"
                      f:PasswordHelper.Attach="True"
                      f:PasswordHelper.Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" 
                      Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" />
-        <Label Content="PasswordConfirm" Grid.Row="3" VerticalAlignment="Top" Padding="5"/>
+        <Label Content="Password Confirmation" Grid.Row="3" VerticalAlignment="Top" Padding="5"/>
         <PasswordBox x:Name="txtPasswordConfirm"
              f:PasswordHelper.Attach="True"
-             f:PasswordHelper.Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" 
+             f:PasswordHelper.Password="{Binding PasswordConfirm, UpdateSourceTrigger=PropertyChanged}" 
              Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" />
         <DockPanel Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
             <Button x:Name="btnBack" Content="Back" 

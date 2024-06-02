@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Windows.Input;
 using prbd_2324_a01.Model;
 using PRBD_Framework;
@@ -8,55 +9,100 @@ namespace prbd_2324_a01.ViewModel;
 
 public class SignupViewModel : ViewModelBase<User, PridContext>
 {
-    public ICommand LoginCommand { get; set; }
-    
-    private string _mail;
+    public ICommand SignupCommand { get; set; }
 
+    private string _mail;
     public string Mail {
         get => _mail;
         set => SetProperty(ref _mail, value, () => Validate());
     }
 
-    private string _password;
+    private string _fullname;
+    public string Fullname {
+        get => _fullname;
+        set => SetProperty(ref _fullname, value, () => ValidateFullname());
+    }
 
+    private string _password;
     public string Password {
         get => _password;
-        set => SetProperty(ref _password, value, () => Validate());
+        set => SetProperty(ref _password, value, () => ValidatePassword());
+    }
+
+    private string _passwordConfirm;
+    public string PasswordConfirm {
+        get => _passwordConfirm;
+        set => SetProperty(ref _passwordConfirm, value, () => ValidatePasswordConfirm());
     }
 
     public SignupViewModel() {
-        LoginCommand = new RelayCommand(LoginAction,
-            () => { return _mail != null && _password != null && !HasErrors; });
-
+        SignupCommand = new RelayCommand(SignupAction, CanSignup);
     }
 
-    private void LoginAction() {
-        if (Validate()) {
-            var user = Context.Users.Where(user => user.Mail.Equals(Mail)).FirstOrDefault();
-            if (user != null && !SecretHasher.Verify(Password, user.HashedPassword)) {
-                AddError(nameof(Password), "wrong password");
-            } else {
-                NotifyColleagues(App.Messages.MSG_LOGIN, user);
-            }
+    private void SignupAction() {
+        if (Validate() && ValidateFullname() && ValidatePassword() && ValidatePasswordConfirm()) {
+            var user = new User(Mail, Password, Fullname, 0);
+            user.AddUser();
+            NotifyColleagues(App.Messages.MSG_LOGIN, user);
         }
+    }
+
+    private bool CanSignup() {
+        return !string.IsNullOrEmpty(Mail) &&
+               !string.IsNullOrEmpty(Fullname) &&
+               !string.IsNullOrEmpty(Password) &&
+               !string.IsNullOrEmpty(PasswordConfirm) &&
+               !HasErrors;
     }
 
     public override bool Validate() {
         ClearErrors();
 
-        var user = Context.Users.Where(user => user.Mail.Equals(Mail)).FirstOrDefault();
-
+        var user = Context.Users.FirstOrDefault(user => user.Mail == Mail);
 
         if (string.IsNullOrEmpty(Mail))
             AddError(nameof(Mail), "required");
         else if (!Validations.Mail(Mail))
             AddError(nameof(Mail), "must be valid");
-        else if (user == null)
-            AddError(nameof(Mail), "does not exist");
-        else {
-            if (string.IsNullOrEmpty(Password))
-                AddError(nameof(Password), "required");
-        }
+        else if (user != null)
+            AddError(nameof(Mail), "does already exist");
+
+        return !HasErrors;
+    }
+
+    public bool ValidateFullname() {
+        ClearErrors(nameof(Fullname));
+
+        if (string.IsNullOrEmpty(Fullname))
+            AddError(nameof(Fullname), "required");
+        else if (Fullname.Length < 3)
+            AddError(nameof(Fullname), "length minimum is 3");
+
+        return !HasErrors;
+    }
+
+    public bool ValidatePassword() {
+        ClearErrors(nameof(Password));
+
+        if (string.IsNullOrEmpty(Password))
+            AddError(nameof(Password), "required");
+        else if (Password.Length < 8)
+            AddError(nameof(Password), "length minimum is 8");
+        else if (!Password.Any(char.IsUpper))
+            AddError(nameof(Password), "Must contain one uppercase");
+        else if (!Password.Any(char.IsNumber))
+            AddError(nameof(Password), "Must contain one number");
+
+        return !HasErrors;
+    }
+
+    public bool ValidatePasswordConfirm() {
+        ClearErrors(nameof(PasswordConfirm));
+
+        if (string.IsNullOrEmpty(PasswordConfirm))
+            AddError(nameof(PasswordConfirm), "required");
+        else if (PasswordConfirm != Password)
+            AddError(nameof(PasswordConfirm), "Password does not match");
 
         return !HasErrors;
     }

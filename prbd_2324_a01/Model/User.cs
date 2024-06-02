@@ -21,5 +21,10 @@ public class User : EntityBase<PridContext>
         Role = role;
     }
 
-    public User() { }
+    public User() {}
+
+    public void AddUser () {
+        Context.Users.Add(this);
+        Context.SaveChanges();
+    }
 }

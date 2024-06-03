@@ -10,7 +10,7 @@ public partial class MainView : WindowBase
         InitializeComponent();
 
         Register<Tricount>(App.Messages.MSG_NEW_TRICOUNT,
-           tricount => DoDisplayTricount(tricount, true));
+           tricount => DoCreateNewTricount(tricount));
 
         Register<Tricount>(App.Messages.MSG_DISPLAY_TRICOUNT,
             tricount => DoDisplayTricount(tricount, false));
@@ -26,7 +26,11 @@ public partial class MainView : WindowBase
     private void DoDisplayTricount(Tricount tricount, bool isNew) {
         Console.Write(tricount.Title.ToString());
         if (tricount != null)
-            OpenTab(isNew ? "<New Tricount>" : tricount.Title, () => new TricountDetailView(tricount, isNew));
+            OpenTab(isNew ? "<New Tricount>" : tricount.Title, () => new TricountDetailView(tricount));
+    }
+
+    private void DoCreateNewTricount(Tricount tricount) {
+        OpenTab("<New Tricount>", () => new AddTricountView());
     }
 
     private void OpenTab(string header, Func<UserControlBase> createView) {

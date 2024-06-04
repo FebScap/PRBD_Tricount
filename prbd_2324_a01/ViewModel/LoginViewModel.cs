@@ -13,6 +13,8 @@ public class LoginViewModel : ViewModelBase<User, PridContext>
     public ICommand BorisCommand { get; set; }
     public ICommand XavierCommand { get; set; }
     public ICommand AdminCommand { get; set; }
+    public ICommand SignupCommand { get; set; }
+
 
     private string _mail;
 
@@ -36,6 +38,7 @@ public class LoginViewModel : ViewModelBase<User, PridContext>
         BorisCommand = new RelayCommand(LogBoris);
         XavierCommand = new RelayCommand(LogXavier);
         AdminCommand = new RelayCommand(LogAdmin);
+        SignupCommand = new RelayCommand(Signup);
     }
 
 
@@ -50,6 +53,9 @@ public class LoginViewModel : ViewModelBase<User, PridContext>
     }
     private void LogAdmin() {
         NotifyColleagues(App.Messages.MSG_LOGIN, Context.Users.Find(5));
+    }
+    private void Signup() {
+        NotifyColleagues(App.Messages.MSG_SIGNUP);
     }
 
     private void LoginAction() {

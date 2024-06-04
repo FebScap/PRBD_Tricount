@@ -51,4 +51,9 @@ public class Tricount : EntityBase<PridContext>
         }
         return Math.Round(myExpenses, 2);
     }
+
+    public void AddTricount() {
+        Context.Tricounts.Add(this);
+        Context.SaveChanges();
+    }
 }

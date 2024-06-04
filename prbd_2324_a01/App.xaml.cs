@@ -13,7 +13,9 @@ public partial class App : ApplicationBase<User, PridContext> {
         MSG_LOGOUT,
         MSG_NEW_TRICOUNT,
         MSG_DISPLAY_TRICOUNT,
-        MSG_CLOSE_TAB
+        MSG_CLOSE_TAB,
+        MSG_SIGNUP,
+        MSG_DO_SIGNUP
     }
 
     public App() {
@@ -42,6 +44,16 @@ public partial class App : ApplicationBase<User, PridContext> {
             Logout();
             NavigateTo<LoginViewModel, User, PridContext>();
         });
+
+        Register(this, Messages.MSG_SIGNUP, () => {
+            NavigateTo<SignupViewModel, User, PridContext>();
+        });
+
+        Register<User>(this, Messages.MSG_DO_SIGNUP, user => {
+            Login(user);
+            NavigateTo<MainViewModel, User, PridContext>();
+        });
+
     }
 
     private static void PrepareDatabase() {

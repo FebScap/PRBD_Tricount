@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace prbd_2324_a01.ViewModel;
 
-public class TricountsViewModel : ViewModelBase<User, PridContext>
+public class ListTricountsViewModel : ViewModelBase<User, PridContext>
 {
     private ObservableCollection<TricountCardViewModel> _tricounts;
     public ObservableCollection<TricountCardViewModel> Tricounts {
@@ -25,7 +25,7 @@ public class TricountsViewModel : ViewModelBase<User, PridContext>
     public ICommand NewTricount { get; set; }
     public ICommand DisplayTricountDetail { get; set; }
 
-    public TricountsViewModel() : base() {
+    public ListTricountsViewModel() : base() {
         OnRefreshData();
 
         ClearFilter = new RelayCommand(() => Filter = "");

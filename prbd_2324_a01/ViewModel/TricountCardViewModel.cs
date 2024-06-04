@@ -1,4 +1,5 @@
 ﻿using prbd_2324_a01.Model;
+using prbd_2324_a01.Utils;
 using PRBD_Framework;
 using System.Text;
 
@@ -14,7 +15,7 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
     public string BgColor => GetBackgroundColor();
     public string BalanceColor => "Black";
     public string Title => Tricount.Title;
-    public string Description => GetDescription();
+    public string Description => StringBuilders.GetDescription(Tricount);
     public string Creator => Context.Users.Find(Tricount.Creator).FullName;
     public string CreationDate => Tricount.CreatedAt.ToShortDateString();
     public string LastOperation => GetLastOperationDate();
@@ -25,7 +26,7 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
     public string MyExpenses => Tricount.GetMyExpenses(CurrentUser.Id) + " €";
     public string MyBalance => 0 + " €";
 
-    public TricountCardViewModel(Tricount tricount) {
+    public TricountCardViewModel(Tricount tricount) : base() {
         _tricount = tricount;
     }
 
@@ -36,13 +37,6 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
             return "DarkSeaGreen";
         }
         return "LightGray";
-    }
-
-    private string GetDescription() {
-        if (Tricount.Description == null) {
-            return "No Description";
-        }
-        return Tricount.Description;
     }
 
     private string GetFriendsNumberToString() {

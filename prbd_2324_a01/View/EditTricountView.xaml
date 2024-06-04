@@ -8,7 +8,7 @@
              xmlns:vw="clr-namespace:prbd_2324_a01.View"
              mc:Ignorable="d"
              x:Name="uc"
-             d:DataContext="{d:DesignInstance Type=vm:TricountCardViewModel, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=vm:EditTricountViewModel, IsDesignTimeCreatable=False}">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -55,6 +55,14 @@
             <DatePicker Grid.Row="2" Grid.Column="1" x:Name="txtDate" FontSize="14" VerticalAlignment="Center" Padding="3" 
                  Text="{Binding DatePicker, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
+
+        <WrapPanel Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Width="auto">
+
+            <Button x:Name="btnCancel" Content="Cancel" Width="auto" Padding="5,1" IsCancel="True"/>
+
+            <Button x:Name="btnSave" Content="Save" Command="{Binding SaveCommand}" Width="auto" Margin="10,0,0,0" Padding="5,1" IsDefault="True"/>
+
+        </WrapPanel>
 
     </Grid>
 

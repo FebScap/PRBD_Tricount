@@ -27,4 +27,17 @@ public class User : EntityBase<PridContext>
         Context.Users.Add(this);
         Context.SaveChanges();
     }
+
+    public IQueryable<Tricount> GetAllOwnedTricount() {
+        return Context.Tricounts.Where(t => t.Creator == this.Id);
+    }
+
+    public bool IsTitleUnique(string title) {
+        Console.WriteLine("unique");
+        var Tricounts = GetAllOwnedTricount();
+        foreach (var tricount in Tricounts) {
+            if (tricount.Title == title) return false;
+        }
+        return true;
+    }
 }

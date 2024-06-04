@@ -1,7 +1,6 @@
 ﻿using PRBD_Framework;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System;
 
 namespace prbd_2324_a01.Model;
 
@@ -10,6 +9,7 @@ public class Tricount : EntityBase<PridContext>
     public string Title { get; set; }
     public string Description { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public bool IsNew { get; set; } = false;
 
     [Required, ForeignKey(nameof(User))]
     public int Creator {  get; set; }
@@ -23,7 +23,9 @@ public class Tricount : EntityBase<PridContext>
         Creator = creator;
     }
 
-    public Tricount() { }
+    public Tricount() {
+        IsNew = true;
+    }
 
     public static IQueryable<Tricount> GetAll() {
         return Context.Tricounts;
@@ -38,7 +40,7 @@ public class Tricount : EntityBase<PridContext>
 
     public double GetTotalExpenses() {
         double totalExpenses = 0;
-        foreach (Operation o in Operation.GetAllByTricountId(this.Id)) {
+        foreach (Operation o in this.GetAllOperations()) {
             totalExpenses += o.Amount;
         }
         return Math.Round(totalExpenses, 2);
@@ -46,14 +48,22 @@ public class Tricount : EntityBase<PridContext>
 
     internal double GetMyExpenses(int id) {
         double myExpenses = 0;
-        foreach (Operation o in Operation.GetAllByTricountId(this.Id)) {
+        foreach (Operation o in this.GetAllOperations()) {
             myExpenses += o.Amount;
         }
         return Math.Round(myExpenses, 2);
     }
 
-    public void AddTricount() {
+    public void Add() {
         Context.Tricounts.Add(this);
         Context.SaveChanges();
+    }
+
+    public IQueryable<Operation> GetAllOperations() {
+        return Context.Operations.Where(o => o.Tricount == this.Id).OrderByDescending(o => o.OperationDate);
+    }
+
+    public Operation GetLastOperation() {
+        return this.GetAllOperations().FirstOrDefault();
     }
 }

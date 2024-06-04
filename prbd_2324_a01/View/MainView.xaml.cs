@@ -9,11 +9,11 @@ public partial class MainView : WindowBase
     public MainView() {
         InitializeComponent();
 
-        Register<Tricount>(App.Messages.MSG_NEW_TRICOUNT,
-           tricount => DoCreateNewTricount(tricount));
+        Register<Tricount>(App.Messages.MSG_EDIT_TRICOUNT,
+           tricount => DoEditTricount(tricount, tricount.IsNew));
 
         Register<Tricount>(App.Messages.MSG_DISPLAY_TRICOUNT,
-            tricount => DoDisplayTricount(tricount, false));
+            tricount => DoDisplayTricount(tricount));
 
         Register<Tricount>(App.Messages.MSG_CLOSE_TAB,
            tricount => DoCloseTab(tricount));
@@ -23,13 +23,13 @@ public partial class MainView : WindowBase
         tabControl.CloseByTag(string.IsNullOrEmpty(tricount.Title) ? "<New Tricount>" : tricount.Title);
     }
 
-    private void DoDisplayTricount(Tricount tricount, bool isNew) {
+    private void DoEditTricount(Tricount tricount, bool isNew) {
         if (tricount != null)
             OpenTab(isNew ? "<New Tricount>" : tricount.Title, () => new EditTricountView(tricount));
     }
 
-    private void DoCreateNewTricount(Tricount tricount) {
-        OpenTab("<New Tricount>", () => new AddTricountView());
+    private void DoDisplayTricount(Tricount tricount) {
+        
     }
 
     private void OpenTab(string header, Func<UserControlBase> createView) {

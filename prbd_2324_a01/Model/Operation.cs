@@ -27,5 +27,9 @@ public class Operation : EntityBase<PridContext>
     }
 
     public Operation() { }
+
+    public User GetInitiator() {
+        return Context.Users.Find(this.Initiator);
+    }
     
 }

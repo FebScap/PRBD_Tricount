@@ -66,4 +66,14 @@ public class Tricount : EntityBase<PridContext>
     public Operation GetLastOperation() {
         return this.GetAllOperations().FirstOrDefault();
     }
+
+    public List<User> GetAllParticipantsExpectCurrent(User CurrentUser) {
+        List<User> users = new List<User>();
+        foreach (Subscription sub in Context.Subscriptions.Where(s => s.TricountId == this.Id)) {
+            if (sub.UserId != CurrentUser.Id) {
+                users.Add(Context.Users.Find(sub.UserId));
+            }
+        }
+        return users;
+    }
 }

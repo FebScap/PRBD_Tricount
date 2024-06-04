@@ -40,4 +40,20 @@ public class User : EntityBase<PridContext>
         }
         return true;
     }
+
+    public List<Tricount> GetAllTricount() {
+        List<Tricount> tricounts = new List<Tricount>();
+        foreach (Subscription sub in Context.Subscriptions.Where(s => s.UserId == this.Id)) {
+            tricounts.Add(Context.Tricounts.Find(sub.TricountId));
+        }
+        return tricounts;
+    }
+
+    public List<Tricount> GetAllTricountFiltered(string filter) {
+        List<Tricount> tricounts = new List<Tricount>();
+        foreach (Subscription sub in Context.Subscriptions.Where(s => s.UserId == this.Id && (s.Tricount.Title.Contains(filter) || s.Tricount.Description.Contains(filter)))) {
+            tricounts.Add(Context.Tricounts.Find(sub.TricountId));
+        }
+        return tricounts;
+    }
 }

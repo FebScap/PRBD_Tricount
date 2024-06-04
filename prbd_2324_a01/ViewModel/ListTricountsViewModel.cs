@@ -41,7 +41,7 @@ public class ListTricountsViewModel : ViewModelBase<User, PridContext>
 
     protected override void OnRefreshData() {
         if (CurrentUser.Id != 5) {
-            List<Tricount> tricounts = string.IsNullOrEmpty(Filter) ? Subscription.GetAllTricountByUserId(CurrentUser.Id) : Subscription.GetAllTricountByUserIdFiltered(CurrentUser.Id, Filter);
+            List<Tricount> tricounts = string.IsNullOrEmpty(Filter) ? CurrentUser.GetAllTricount() : CurrentUser.GetAllTricountFiltered(Filter);
             Tricounts = new ObservableCollection<TricountCardViewModel>(tricounts.Select(t => new TricountCardViewModel(t)));
         } else {
             IQueryable<Tricount> tricounts = string.IsNullOrEmpty(Filter) ? Tricount.GetAll() : Tricount.GetAllFiltered(Filter);

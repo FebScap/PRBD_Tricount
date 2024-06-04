@@ -19,6 +19,12 @@ public class DisplayTricountViewModel : ViewModelBase<User, PridContext>
         get => _operations;
         set => SetProperty(ref _operations, value);
     }
+    private ObservableCollection<UserBalanceCardViewModel> _users;
+    public ObservableCollection<UserBalanceCardViewModel> Users {
+        get => _users;
+        set => SetProperty(ref _users, value);
+    }
+
     private readonly Tricount _tricount;
 
     public Tricount Tricount {
@@ -38,8 +44,11 @@ public class DisplayTricountViewModel : ViewModelBase<User, PridContext>
 
     protected override void OnRefreshData() {
         IQueryable<Operation> operations = Tricount.GetAllOperations();
-       
+        List<User> users = Tricount.GetAllUsers();
+
         Operations = new ObservableCollection<OperationCardViewModel>(operations.Select(o => new OperationCardViewModel(o)));
+        Users = new ObservableCollection<UserBalanceCardViewModel>(users.Select(u => new UserBalanceCardViewModel(u, Tricount)));
+        Console.WriteLine(users.Count());
     }
 }
 

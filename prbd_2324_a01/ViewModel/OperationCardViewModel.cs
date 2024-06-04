@@ -13,8 +13,8 @@ public class OperationCardViewModel : ViewModelBase<User, PridContext> {
     }
 
     public string Title => Operation.Title;
-    public string Amount => Operation.Amount + " €";
-    public string PaidBy => Operation.GetInitiator().FullName;
+    public string Amount => string.Format("{0:0.00 €}", Math.Round(Operation.Amount, 2));
+    public string PaidBy => "Paid by " + Operation.GetInitiator().FullName;
     public string Date => Operation.OperationDate.ToShortDateString();
 
 

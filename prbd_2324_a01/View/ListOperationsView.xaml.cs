@@ -10,4 +10,8 @@ public partial class ListOperationsView : UserControlBase
     public ListOperationsView() {
         InitializeComponent();
     }
+
+    private void listView_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e) {
+
+    }
 }

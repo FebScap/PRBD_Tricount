@@ -10,13 +10,19 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:DisplayTricountViewModel, IsDesignTimeCreatable=False}">
 
-    <ListView x:Name="listView" ItemsSource="{Binding Operations}" BorderBrush="Transparent" SelectionMode="Single" ScrollViewer.VerticalScrollBarVisibility="Auto" d:ItemsSource="{d:SampleData ItemCount=5}">
+    <ListView x:Name="listView" ItemsSource="{Binding Operations}" Padding="5" BorderBrush="Transparent" SelectionMode="Single" ScrollViewer.CanContentScroll="True" d:ItemsSource="{d:SampleData ItemCount=5}">
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="MouseDoubleClick">
                 <i:InvokeCommandAction Command="{Binding DisplayEditOperation}"
-                       CommandParameter="{Binding ElementName=listView, Path=SelectedItem}"/>
+                CommandParameter="{Binding ElementName=listView, Path=SelectedItem}"/>
             </i:EventTrigger>
         </i:Interaction.Triggers>
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                <Setter Property="Margin" Value="2"></Setter>
+            </Style>
+        </ListView.ItemContainerStyle>
         <ListView.ItemsPanel>
             <ItemsPanelTemplate>
                 <StackPanel></StackPanel>
@@ -24,8 +30,9 @@
         </ListView.ItemsPanel>
         <ListView.ItemTemplate>
             <DataTemplate>
-                <vw:OperationCardView HorizontalAlignment="Stretch" />
+                <vw:OperationCardView />
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>
+
 </f:UserControlBase>

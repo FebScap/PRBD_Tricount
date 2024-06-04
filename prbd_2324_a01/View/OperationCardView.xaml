@@ -7,7 +7,7 @@
               xmlns:vm="clr-namespace:prbd_2324_a01.ViewModel"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:OperationCardViewModel, IsDesignTimeCreatable=False}">
-    <Border BorderBrush="Transparent" CornerRadius="15" Height="60" Margin="0,10,0,0" Padding="5" HorizontalAlignment="Stretch" Background="Gray">
+    <Border BorderBrush="Transparent" CornerRadius="15" Height="auto" Padding="10" HorizontalAlignment="Stretch" Background="Silver">
         <Border.Effect>
             <DropShadowEffect
                 Color="Gray"

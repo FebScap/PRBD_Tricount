@@ -4,10 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
-              xmlns:vm="clr-namespace:prbd_2324_a01.ViewModel"
+             xmlns:vm="clr-namespace:prbd_2324_a01.ViewModel"
+             xmlns:vw="clr-namespace:prbd_2324_a01.View"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:DisplayTricountViewModel, IsDesignTimeCreatable=False}">
-    <Border BorderBrush="Transparent" CornerRadius="15"  Height="260" Width="250" Padding="13" Background="{Binding BgColor}">
-       
-    </Border>
+
+    <ListView x:Name="listView" ItemsSource="{Binding Users}" Padding="5" BorderBrush="Transparent" ScrollViewer.CanContentScroll="True" d:ItemsSource="{d:SampleData ItemCount=5}">
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                <Setter Property="Margin" Value="2"></Setter>
+            </Style>
+        </ListView.ItemContainerStyle>
+        <ListView.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel></StackPanel>
+            </ItemsPanelTemplate>
+        </ListView.ItemsPanel>
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <vw:UserBalanceCardView />
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
 </f:UserControlBase>

@@ -17,7 +17,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         set => SetProperty(ref _titleTextBox, value, () => Validate());
     }
 
-    private string _descriptionTextBox;
+    private string _descriptionTextBox = "";
 
     public string DescriptionTextBox {
         get => _descriptionTextBox;
@@ -76,7 +76,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         ClearErrors();
 
         if (DescriptionTextBox.Length == 0 || DescriptionTextBox.Length < 3)
-            AddError(nameof (DescriptionTextBox), "Must be empty or at least 3 char");
+                AddError(nameof (DescriptionTextBox), "Must be empty or at least 3 char");
         return !HasErrors;
 
     }

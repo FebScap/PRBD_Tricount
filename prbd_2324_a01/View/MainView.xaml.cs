@@ -25,7 +25,7 @@ public partial class MainView : WindowBase
 
     private void DoDisplayTricount(Tricount tricount, bool isNew) {
         if (tricount != null)
-            OpenTab(isNew ? "<New Tricount>" : tricount.Title, () => new TricountDetailView(tricount));
+            OpenTab(isNew ? "<New Tricount>" : tricount.Title, () => new EditTricountView(tricount));
     }
 
     private void DoCreateNewTricount(Tricount tricount) {

@@ -4,14 +4,14 @@ using PRBD_Framework;
 
 namespace prbd_2324_a01.View;
 
-public partial class TricountDetailView : UserControlBase
+public partial class EditTricountView : UserControlBase
 {
     private Tricount tricount;
 
-    public TricountDetailView(Tricount tricount) {
+    public EditTricountView(Tricount tricount) {
         InitializeComponent();
         
-        DataContext = new TricountDetailViewModel(tricount, isNew);
+        DataContext = new EditTricountViewModel(tricount, true);
 
         this.tricount = tricount;
     }

@@ -4,7 +4,7 @@ using PRBD_Framework;
 
 namespace prbd_2324_a01.ViewModel;
 
-public class TricountDetailViewModel : ViewModelBase<User, PridContext>
+public class EditTricountViewModel : ViewModelBase<User, PridContext>
 {
     private readonly Tricount _tricount;
     private readonly bool _isNew;
@@ -22,7 +22,7 @@ public class TricountDetailViewModel : ViewModelBase<User, PridContext>
     public string Creator => IsNew ? CurrentUser.FullName : Context.Users.Find(Tricount.Creator).FullName;
     public string CreationDate => IsNew ? DateTime.Now.ToShortDateString() : Tricount.CreatedAt.ToShortDateString();
 
-    public TricountDetailViewModel(Tricount tricount, bool isNew) : base() {
+    public EditTricountViewModel(Tricount tricount, bool isNew) : base() {
         _tricount = tricount;
         _isNew = isNew;
     }

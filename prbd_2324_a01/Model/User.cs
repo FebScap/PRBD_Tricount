@@ -23,7 +23,7 @@ public class User : EntityBase<PridContext>
 
     public User() {}
 
-    public void AddUser () {
+    public void Add () {
         Context.Users.Add(this);
         Context.SaveChanges();
     }

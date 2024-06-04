@@ -42,7 +42,7 @@ public class SignupViewModel : ViewModelBase<User, PridContext>
     private void SignupAction() {
         if (Validate() && ValidateFullname() && ValidatePassword() && ValidatePasswordConfirm()) {
             var user = new User(Mail, Password, Fullname, 0);
-            user.AddUser();
+            user.Add();
             NotifyColleagues(App.Messages.MSG_LOGIN, user);
         }
     }

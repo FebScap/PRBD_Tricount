@@ -1,13 +1,14 @@
 ﻿using prbd_2324_a01.Model;
 using PRBD_Framework;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
+using System.Collections.Generic;
 
 namespace prbd_2324_a01.ViewModel;
 
 public class ListTricountsViewModel : ViewModelBase<User, PridContext>
 {
-
     private ObservableCollection<TricountCardViewModel> _tricounts;
     public ObservableCollection<TricountCardViewModel> Tricounts {
         get => _tricounts;
@@ -30,7 +31,7 @@ public class ListTricountsViewModel : ViewModelBase<User, PridContext>
         ClearFilter = new RelayCommand(() => Filter = "");
 
         NewTricount = new RelayCommand(() => {
-            NotifyColleagues(App.Messages.MSG_NEW_TRICOUNT, new Tricount());
+            NotifyColleagues(App.Messages.MSG_EDIT_TRICOUNT, new Tricount());
         });
 
         DisplayTricountDetail = new RelayCommand<TricountCardViewModel>(vm => {
@@ -46,6 +47,5 @@ public class ListTricountsViewModel : ViewModelBase<User, PridContext>
             IQueryable<Tricount> tricounts = string.IsNullOrEmpty(Filter) ? Tricount.GetAll() : Tricount.GetAllFiltered(Filter);
             Tricounts = new ObservableCollection<TricountCardViewModel>(tricounts.Select(t => new TricountCardViewModel(t)));
         }
-        
     }
 }

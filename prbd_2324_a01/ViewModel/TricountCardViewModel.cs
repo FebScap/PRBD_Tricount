@@ -52,12 +52,12 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
     }
 
     private string OperationDateVisibility() {
-        if (Operation.GetAllByTricountId(Tricount.Id).Any()) return "Visible";
+        if (Tricount.GetAllOperations().Any()) return "Visible";
         return "Collapsed";
     }
 
     private string NumberOfOperationsToString() {
-        int number = Operation.GetAllByTricountId(Tricount.Id).Count();
+        int number = Tricount.GetAllOperations().Count();
         if (number == 0) {
             return "No operation";
         } else if (number == 1) {
@@ -68,8 +68,8 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
     }
 
     private string GetLastOperationDate() {
-        if (Operation.GetLastOperationByTricountId(Tricount.Id) == null) return null;  
-        return Operation.GetLastOperationByTricountId(Tricount.Id).OperationDate.ToShortDateString();
+        if (Tricount.GetLastOperation() == null) return null;  
+        return Tricount.GetLastOperation().OperationDate.ToShortDateString();
     }
 
 }

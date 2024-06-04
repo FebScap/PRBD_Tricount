@@ -14,14 +14,14 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
 
     public string TitleTextBox {
         get => _titleTextBox;
-        set => SetProperty(ref _titleTextBox, value, () => ValidateTitle());
+        set => SetProperty(ref _titleTextBox, value, () => Validate());
     }
 
-    private string _descriptionTextBox;
+    private string _descriptionTextBox = "";
 
     public string DescriptionTextBox {
         get => _descriptionTextBox;
-        set => SetProperty(ref _descriptionTextBox, value);
+        set => SetProperty(ref _descriptionTextBox, value, () => Validate());
     }
 
     private readonly Tricount _tricount;
@@ -46,7 +46,6 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         SaveCommand = new RelayCommand(SaveTricountAction, CanSave);
     }
 
-
     private void SaveTricountAction() {
         if (Validate()) {
             var tricount = new Tricount(TitleTextBox, DescriptionTextBox, App.CurrentUser.Id);
@@ -60,7 +59,6 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
                !HasErrors;
     }
 
-
     public bool ValidateTitle() {
         ClearErrors();
 
@@ -68,9 +66,22 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
             AddError(nameof(TitleTextBox), "required");
         else if (TitleTextBox.Length < 3)
             AddError(nameof(TitleTextBox), "length minimum is 3");
-
-        //Ajouter titre unique par user
+        else if (!CurrentUser.IsTitleUnique(TitleTextBox))
+            AddError(nameof(TitleTextBox), "Must be unique per user");
 
         return !HasErrors;
+    }
+
+    public bool ValidateDescription() {
+        ClearErrors();
+
+        if (DescriptionTextBox.Length == 0 || DescriptionTextBox.Length < 3)
+                AddError(nameof (DescriptionTextBox), "Must be empty or at least 3 char");
+        return !HasErrors;
+
+    }
+
+    public override bool Validate() {
+       return ValidateTitle() && ValidateDescription();
     }
 }

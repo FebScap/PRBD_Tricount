@@ -40,7 +40,7 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
     }
 
     private string GetFriendsNumberToString() {
-        int number = Subscription.GetAllUserByTricountIdExeptCurent(Tricount.Id, CurrentUser).Count();
+        int number = Tricount.GetAllParticipantsExpectCurrent(CurrentUser).Count;
         if (number == 0) {
             return "no friend";
         } else if (number == 1) {

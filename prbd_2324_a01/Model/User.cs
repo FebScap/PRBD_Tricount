@@ -27,4 +27,33 @@ public class User : EntityBase<PridContext>
         Context.Users.Add(this);
         Context.SaveChanges();
     }
+
+    public IQueryable<Tricount> GetAllOwnedTricount() {
+        return Context.Tricounts.Where(t => t.Creator == this.Id);
+    }
+
+    public bool IsTitleUnique(string title) {
+        Console.WriteLine("unique");
+        var Tricounts = GetAllOwnedTricount();
+        foreach (var tricount in Tricounts) {
+            if (tricount.Title == title) return false;
+        }
+        return true;
+    }
+
+    public List<Tricount> GetAllTricount() {
+        List<Tricount> tricounts = new List<Tricount>();
+        foreach (Subscription sub in Context.Subscriptions.Where(s => s.UserId == this.Id)) {
+            tricounts.Add(Context.Tricounts.Find(sub.TricountId));
+        }
+        return tricounts;
+    }
+
+    public List<Tricount> GetAllTricountFiltered(string filter) {
+        List<Tricount> tricounts = new List<Tricount>();
+        foreach (Subscription sub in Context.Subscriptions.Where(s => s.UserId == this.Id && (s.Tricount.Title.Contains(filter) || s.Tricount.Description.Contains(filter)))) {
+            tricounts.Add(Context.Tricounts.Find(sub.TricountId));
+        }
+        return tricounts;
+    }
 }

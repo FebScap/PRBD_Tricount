@@ -20,19 +20,19 @@ public class SignupViewModel : ViewModelBase<User, PridContext>
     private string _fullname;
     public string Fullname {
         get => _fullname;
-        set => SetProperty(ref _fullname, value, () => ValidateFullname());
+        set => SetProperty(ref _fullname, value, () => Validate());
     }
 
     private string _password;
     public string Password {
         get => _password;
-        set => SetProperty(ref _password, value, () => ValidatePassword());
+        set => SetProperty(ref _password, value, () => Validate());
     }
 
     private string _passwordConfirm;
     public string PasswordConfirm {
         get => _passwordConfirm;
-        set => SetProperty(ref _passwordConfirm, value, () => ValidatePasswordConfirm());
+        set => SetProperty(ref _passwordConfirm, value, () => Validate());
     }
 
     public SignupViewModel() {
@@ -40,7 +40,7 @@ public class SignupViewModel : ViewModelBase<User, PridContext>
     }
 
     private void SignupAction() {
-        if (Validate() && ValidateFullname() && ValidatePassword() && ValidatePasswordConfirm()) {
+        if (Validate()) {
             var user = new User(Mail, Password, Fullname, 0);
             user.Add();
             NotifyColleagues(App.Messages.MSG_LOGIN, user);
@@ -55,7 +55,7 @@ public class SignupViewModel : ViewModelBase<User, PridContext>
                !HasErrors;
     }
 
-    public override bool Validate() {
+    public bool ValidateMail() {
         ClearErrors();
 
         var user = Context.Users.FirstOrDefault(user => user.Mail == Mail);
@@ -105,6 +105,10 @@ public class SignupViewModel : ViewModelBase<User, PridContext>
             AddError(nameof(PasswordConfirm), "Password does not match");
 
         return !HasErrors;
+    }
+
+    public override bool Validate() {
+        return ValidateMail() && ValidateFullname() && ValidatePassword() && ValidatePasswordConfirm();
     }
 
     protected override void OnRefreshData() {

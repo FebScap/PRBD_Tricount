@@ -7,6 +7,5 @@ namespace prbd_2324_a01.ViewModel;
 
 public class TricountDetailViewModel : ViewModelBase<User, PridContext>
 {
-
-   
+    
 }

@@ -9,10 +9,39 @@
              >
 
     <UserControl.DataContext>
-        <vm:TricountDetailViewModel />
+        <vm:AddTricountViewModel />
     </UserControl.DataContext>
-    <StackPanel>
-        <TextBlock Text="{Binding Greeting}"><Run Text="NewTricountPage"/></TextBlock>
-    </StackPanel>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Content="New Tricount - No Descritpion"/>
+        <Label Content="Created by" Grid.Row="1"/>
+        <Label Content="Title:" Grid.Row="2"/>
+        <TextBox x:Name="txtTitle" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Content="Description:" Grid.Row="3"/>
+        <TextBox x:Name="txtDescription" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
+        <Label Content="Creation date:" Grid.Row="4"/>
+        <Label Content="Participants" Grid.Row="5"/>
+        <Label Content="Templates" Grid.Row="5" Grid.Column="2"/>
 
+        <!-- Footer Button -->
+        <WrapPanel Grid.Row="8" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Width="auto">
+            <Button x:Name="btnCancel" Content="Cancel" Command="{Binding Cancel}" Width="auto" Padding="5,1" IsCancel="True" Click="btnCancel_Click"/>
+            <Button x:Name="btnSave" Content="Save" Command="{Binding SaveCommand}" Width="auto" Margin="10,0,0,0" Padding="5,1" IsDefault="True"/>
+        </WrapPanel>
+    </Grid>
 </f:UserControlBase>

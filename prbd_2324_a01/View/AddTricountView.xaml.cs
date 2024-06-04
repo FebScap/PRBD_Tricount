@@ -10,4 +10,8 @@ public partial class AddTricountView : UserControlBase
 
         InitializeComponent();
     }
+
+    private void btnCancel_Click(object sender, System.Windows.RoutedEventArgs e) {
+        NotifyColleagues(App.Messages.MSG_CLOSE_TAB);
+    }
 }

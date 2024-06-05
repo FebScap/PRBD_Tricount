@@ -24,7 +24,7 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
     public string NumberOfOperations => NumberOfOperationsToString();
     public string TotalExpenses => Tricount.GetTotalExpenses() + " €";
     public string MyExpenses => Tricount.GetMyExpenses(CurrentUser.Id) + " €";
-    public string MyBalance => 0 + " €";
+    public string MyBalance => GetMyBalance() + " €";
 
     public TricountCardViewModel(Tricount tricount) : base() {
         _tricount = tricount;
@@ -70,6 +70,16 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
     private string GetLastOperationDate() {
         if (Tricount.GetLastOperation() == null) return null;  
         return Tricount.GetLastOperation().OperationDate.ToShortDateString();
+    }
+
+    private string GetMyBalance() {
+        var balances = Tricount.CalculateBalances();
+
+        if (balances.TryGetValue(CurrentUser, out double balance)) {
+            return Math.Round(balance, 2).ToString();
+        } else {
+            return "0.0"; // Retourne zéro si l'utilisateur n'a pas de solde calculé
+        }
     }
 
 }

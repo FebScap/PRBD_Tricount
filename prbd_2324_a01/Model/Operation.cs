@@ -28,4 +28,21 @@ public class Operation : EntityBase<PridContext>
 
     public Operation() { }
     
+    private double GetTotalWeight() {
+            return Repartitions.Sum(r => r.Weight);
+    }
+    public Dictionary<User, double> GetParticipantShares() {
+        var totalWeight = GetTotalWeight();
+        var shares = new Dictionary<User, double>();
+
+        foreach (var repartition in Repartitions) {
+            var user = repartition.User;
+            var share = (repartition.Weight / totalWeight) * Amount;
+            shares[user] = share;
+        }
+
+        return shares;
+    }
+
+
 }

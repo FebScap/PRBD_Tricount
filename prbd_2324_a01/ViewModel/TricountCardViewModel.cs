@@ -22,9 +22,9 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
     public string FriendsNumber => GetFriendsNumberToString();
     public string HasOperations => OperationDateVisibility();
     public string NumberOfOperations => NumberOfOperationsToString();
-    public string TotalExpenses => Tricount.GetTotalExpenses() + " €";
-    public string MyExpenses => Tricount.GetMyExpenses(CurrentUser.Id) - GetMyBalance()  + " €";
-    public string MyBalance => GetMyBalance() + " €";
+    public string TotalExpenses => string.Format("{0:0.00 €}", Math.Round(Tricount.GetTotalExpenses(), 2));
+    public string MyExpenses => string.Format("{0:0.00 €}",Math.Round((Tricount.GetMyExpenses(CurrentUser.Id) - GetMyBalance()), 2));
+    public string MyBalance => string.Format("{0:0.00 €}", Math.Round(GetMyBalance(), 2));
 
     public TricountCardViewModel(Tricount tricount) : base() {
         _tricount = tricount;
@@ -43,6 +43,8 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
         int number = Tricount.GetAllParticipantsExpectCurrent(CurrentUser).Count;
         if (number == 0) {
             return "no friend";
+        } else if (number == 1) {
+            return number + " friend";
         } else {
             return number + " friends";
         }
@@ -57,6 +59,8 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
         int number = Tricount.GetAllOperations().Count();
         if (number == 0) {
             return "No operation";
+        } else if (number == 1) {
+            return number + " operation";
         } else {
             return number + " operations";
         }
@@ -71,7 +75,7 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
         var balances = Tricount.CalculateBalances();
 
         if (balances.TryGetValue(CurrentUser.Id, out double balance)) {
-            return Math.Round(balance, 2);
+            return balance;
         } else {
             return 0.00; // Retourne zéro si l'utilisateur n'a pas de solde calculé
         }

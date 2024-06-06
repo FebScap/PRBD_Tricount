@@ -29,7 +29,9 @@ public partial class MainView : WindowBase
     }
 
     private void DoDisplayTricount(Tricount tricount) {
-        
+        if (tricount != null)
+            OpenTab(tricount.Title, () => new DisplayTricountView(tricount));
+
     }
 
     private void OpenTab(string header, Func<UserControlBase> createView) {

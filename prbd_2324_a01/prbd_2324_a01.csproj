@@ -31,4 +31,10 @@
     <ProjectReference Include="..\PRBD_Framework\PRBD_Framework.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="View\BalanceView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

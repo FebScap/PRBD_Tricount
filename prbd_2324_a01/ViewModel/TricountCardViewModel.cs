@@ -23,7 +23,7 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
     public string HasOperations => OperationDateVisibility();
     public string NumberOfOperations => NumberOfOperationsToString();
     public string TotalExpenses => Tricount.GetTotalExpenses() + " €";
-    public string MyExpenses => Tricount.GetMyExpenses(CurrentUser.Id) + " €";
+    public string MyExpenses => Tricount.GetMyExpenses(CurrentUser.Id) - GetMyBalance()  + " €";
     public string MyBalance => GetMyBalance() + " €";
 
     public TricountCardViewModel(Tricount tricount) : base() {
@@ -31,9 +31,9 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
     }
 
     private string GetBackgroundColor() {
-        if (Tricount.Title.Contains("Vacances")) {
+        if (GetMyBalance() < 0) {
             return "LightPink";
-        } else if (Tricount.Title.Contains("Resto")) {
+        } else if (GetMyBalance() > 0) {
             return "DarkSeaGreen";
         }
         return "LightGray";
@@ -43,12 +43,9 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
         int number = Tricount.GetAllParticipantsExpectCurrent(CurrentUser).Count;
         if (number == 0) {
             return "no friend";
-        } else if (number == 1) {
-            return "1 friend";
         } else {
             return number + " friends";
         }
-
     }
 
     private string OperationDateVisibility() {
@@ -60,8 +57,6 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
         int number = Tricount.GetAllOperations().Count();
         if (number == 0) {
             return "No operation";
-        } else if (number == 1) {
-            return "1 operation";
         } else {
             return number + " operations";
         }
@@ -72,13 +67,13 @@ public class TricountCardViewModel : ViewModelBase<User, PridContext> {
         return Tricount.GetLastOperation().OperationDate.ToShortDateString();
     }
 
-    private string GetMyBalance() {
+    private double GetMyBalance() {
         var balances = Tricount.CalculateBalances();
 
-        if (balances.TryGetValue(CurrentUser, out double balance)) {
-            return Math.Round(balance, 2).ToString();
+        if (balances.TryGetValue(CurrentUser.Id, out double balance)) {
+            return Math.Round(balance, 2);
         } else {
-            return "0.0"; // Retourne zéro si l'utilisateur n'a pas de solde calculé
+            return 0.00; // Retourne zéro si l'utilisateur n'a pas de solde calculé
         }
     }
 

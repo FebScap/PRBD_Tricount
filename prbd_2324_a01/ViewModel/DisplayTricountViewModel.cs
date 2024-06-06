@@ -48,7 +48,6 @@ public class DisplayTricountViewModel : ViewModelBase<User, PridContext>
 
         Operations = new ObservableCollection<OperationCardViewModel>(operations.Select(o => new OperationCardViewModel(o)));
         Users = new ObservableCollection<UserBalanceCardViewModel>(users.Select(u => new UserBalanceCardViewModel(u, Tricount)));
-        Console.WriteLine(users.Count());
     }
 }
 

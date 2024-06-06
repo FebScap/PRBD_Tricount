@@ -1,10 +1,5 @@
-﻿using Microsoft.Identity.Client;
-using prbd_2324_a01.Model;
-using prbd_2324_a01.Utils;
+﻿using prbd_2324_a01.Model;
 using PRBD_Framework;
-using SQLitePCL;
-using System.Text;
-using System.Windows.Navigation;
 
 namespace prbd_2324_a01.ViewModel;
 
@@ -29,9 +24,11 @@ public class UserBalanceCardViewModel : ViewModelBase<User, PridContext> {
 
 
 
+
     public UserBalanceCardViewModel(User user, Tricount tricount) : base() {
         _user = user;
         _tricount = tricount;
+        OnRefreshData();
     }
 
     public static Double GetAmountBgWidth(Tricount t, Double curentValue) {
@@ -48,4 +45,8 @@ public class UserBalanceCardViewModel : ViewModelBase<User, PridContext> {
     public static Double GetBalance(User u, Tricount t) {
         return t.CalculateBalances().GetValueOrDefault(u.Id);
     }
-}
+
+    protected override void OnRefreshData() {
+        Console.WriteLine();
+    }
+ }

@@ -4,6 +4,7 @@ using System.Windows.Input;
 using prbd_2324_a01.Model;
 using PRBD_Framework;
 using prbd_2324_a01.Utils;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace prbd_2324_a01.ViewModel;
 
@@ -14,25 +15,25 @@ public class SignupViewModel : ViewModelBase<User, PridContext>
     private string _mail;
     public string Mail {
         get => _mail;
-        set => SetProperty(ref _mail, value, () => Validate());
+        set => SetProperty(ref _mail, value, () => ValidateMail());
     }
 
     private string _fullname;
     public string Fullname {
         get => _fullname;
-        set => SetProperty(ref _fullname, value, () => Validate());
+        set => SetProperty(ref _fullname, value, () => ValidateFullname());
     }
 
     private string _password;
     public string Password {
         get => _password;
-        set => SetProperty(ref _password, value, () => Validate());
+        set => SetProperty(ref _password, value, () => ValidatePassword());
     }
 
     private string _passwordConfirm;
     public string PasswordConfirm {
         get => _passwordConfirm;
-        set => SetProperty(ref _passwordConfirm, value, () => Validate());
+        set => SetProperty(ref _passwordConfirm, value, () => ValidatePasswordConfirm());
     }
 
     public SignupViewModel() {
@@ -56,7 +57,9 @@ public class SignupViewModel : ViewModelBase<User, PridContext>
     }
 
     public bool ValidateMail() {
-        ClearErrors();
+        if (Errors.ContainsKey(nameof(Mail))) {
+            ClearErrors(nameof(Mail));
+        }
 
         var user = Context.Users.FirstOrDefault(user => user.Mail == Mail);
 
@@ -71,7 +74,9 @@ public class SignupViewModel : ViewModelBase<User, PridContext>
     }
 
     public bool ValidateFullname() {
-        ClearErrors();
+        if (Errors.ContainsKey(nameof(Fullname))) {
+            ClearErrors(nameof(Fullname));
+        }
 
         if (string.IsNullOrEmpty(Fullname))
             AddError(nameof(Fullname), "required");
@@ -82,7 +87,9 @@ public class SignupViewModel : ViewModelBase<User, PridContext>
     }
 
     public bool ValidatePassword() {
-        ClearErrors();
+        if (Errors.ContainsKey(nameof(Password))) {
+            ClearErrors(nameof(Password));
+        }
 
         if (string.IsNullOrEmpty(Password))
             AddError(nameof(Password), "required");
@@ -97,7 +104,9 @@ public class SignupViewModel : ViewModelBase<User, PridContext>
     }
 
     public bool ValidatePasswordConfirm() {
-        ClearErrors();
+        if (Errors.ContainsKey(nameof(PasswordConfirm))) {
+            ClearErrors(nameof(PasswordConfirm));
+        }
 
         if (string.IsNullOrEmpty(PasswordConfirm))
             AddError(nameof(PasswordConfirm), "required");

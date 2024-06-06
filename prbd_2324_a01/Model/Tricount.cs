@@ -49,7 +49,7 @@ public class Tricount : EntityBase<PridContext>
 
     internal double GetMyExpenses(int id) {
         double myExpenses = 0;
-        foreach (Operation o in this.GetAllOperations()) {
+        foreach (Operation o in this.GetOperationsById(id)) {
             myExpenses += o.Amount;
         }
         return Math.Round(myExpenses, 2);
@@ -62,6 +62,9 @@ public class Tricount : EntityBase<PridContext>
 
     public IQueryable<Operation> GetAllOperations() {
         return Context.Operations.Where(o => o.Tricount == this.Id).OrderByDescending(o => o.OperationDate);
+    }
+    public IQueryable<Operation> GetOperationsById(int id) {
+        return Context.Operations.Where(o => o.Tricount == this.Id && o.Initiator == id).OrderByDescending(o => o.OperationDate);
     }
 
     public Operation GetLastOperation() {
@@ -78,39 +81,29 @@ public class Tricount : EntityBase<PridContext>
         return users;
     }
 
-    public List<User> GetParticipants() {
+    public List<int> GetParticipantsIds() {
         return Context.Subscriptions
                       .Where(s => s.TricountId == Id)
-                      .Select(s => s.User)
+                      .Select(s => s.User.Id)
                       .ToList();
     }
 
-    public Dictionary<User, double> CalculateBalances() {
-        var participants = GetParticipants();
-        var balances = new Dictionary<User, double>();
+    public Dictionary<int, double> CalculateBalances() {
 
-        foreach (var participant in participants) {
-            balances[participant] = 0.0;
+        var participantsIds = GetParticipantsIds();
+        var balances = new Dictionary<int, double>();
+
+        foreach (var participantId in participantsIds) {
+            balances[participantId] = 0.0;
         }
-
         foreach (var operation in GetAllOperations()) {
             var shares = operation.GetParticipantShares();
 
             foreach (var share in shares) {
-                if (!balances.ContainsKey(share.Key)) {
-                    balances[share.Key] = 0.0;
-                }
                 balances[share.Key] -= share.Value; // Part imputée à chaque participant
             }
-
-            var initiator = User.GetUserById(operation.Initiator);
-            if (!balances.ContainsKey(initiator)) {
-                balances[initiator] = 0.0;
-            }
-            balances[initiator] += operation.Amount; // Montant total imputé au payeur
+            balances[operation.Initiator] += operation.Amount; // Montant total imputé au payeur
         }
         return balances;
     }
-
-
 }

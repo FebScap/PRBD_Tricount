@@ -46,6 +46,6 @@ public class UserBalanceCardViewModel : ViewModelBase<User, PridContext> {
     }
 
     public static Double GetBalance(User u, Tricount t) {
-        return Math.Round(t.CalculateBalances().GetValueOrDefault(u), 2);
+        return t.CalculateBalances().GetValueOrDefault(u.Id);
     }
 }

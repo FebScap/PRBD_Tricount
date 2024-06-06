@@ -191,7 +191,7 @@ public class PridContext : DbContextBase
         modelBuilder.Entity<Operation>().HasData(
             new Operation { Id = ++count, Title = "Colruyt", Tricount = 4, Amount = 100, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 2 },
             new Operation { Id = ++count, Title = "Plein essence", Tricount = 4, Amount = 75, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 1 },
-            new Operation { Id = ++count, Title = "Grosses courses LIDL", Tricount = 4, Amount = 212.74, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 3 },
+            new Operation { Id = ++count, Title = "Grosses courses LIDL", Tricount = 4, Amount = 212.47, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 3 },
             new Operation { Id = ++count, Title = "Apéros", Tricount = 4, Amount = 31.89745622, OperationDate = DateTime.Parse("2023/10/13"), Initiator = 1 },
             new Operation { Id = ++count, Title = "Boucherie", Tricount = 4, Amount = 25.5, OperationDate = DateTime.Parse("2023/10/26"), Initiator = 2 },
             new Operation { Id = ++count, Title = "Loterie", Tricount = 4, Amount = 35, OperationDate = DateTime.Parse("2023/10/26"), Initiator = 1 },

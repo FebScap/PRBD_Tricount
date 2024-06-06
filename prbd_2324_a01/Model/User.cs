@@ -56,4 +56,25 @@ public class User : EntityBase<PridContext>
         }
         return tricounts;
     }
+    public static User GetUserById(int id) {
+        using (var context = new PridContext()) {
+            var user = context.Users
+                .Where(u => u.Id == id)
+                .Select(u => new User {
+                    Id = u.Id,
+                    Mail = u.Mail,
+                    HashedPassword = u.HashedPassword,
+                    FullName = u.FullName,
+                    Role = u.Role
+                })
+                .SingleOrDefault();
+
+            return user;
+        }
+    }
+
+    public override string ToString() {
+        return $"User Id: {Id}, Mail: {Mail}, Full Name: {FullName}, Role: {Role}";
+    }
+
 }

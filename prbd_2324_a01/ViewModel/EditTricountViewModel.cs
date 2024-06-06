@@ -10,6 +10,8 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
 {
 
     public ICommand SaveCommand { get; set; }
+    public ICommand CancelCommand { get; set; }
+
     private string _titleTextBox;
 
     public string TitleTextBox {
@@ -44,6 +46,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         _tricount = tricount;
         _isNew = isNew;
         SaveCommand = new RelayCommand(SaveTricountAction, CanSave);
+        CancelCommand = new RelayCommand(CancelAction);
     }
 
     private void SaveTricountAction() {
@@ -52,6 +55,10 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
             tricount.Add();
             NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, tricount);
         }
+    }
+
+    private void CancelAction() {
+        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
     }
 
     private bool CanSave() {
@@ -75,8 +82,8 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
     public bool ValidateDescription() {
         ClearErrors();
 
-        if (DescriptionTextBox.Length == 0 || DescriptionTextBox.Length < 3)
-                AddError(nameof (DescriptionTextBox), "Must be empty or at least 3 char");
+        if (!string.IsNullOrEmpty(DescriptionTextBox) && DescriptionTextBox.Length < 3)
+            AddError(nameof (DescriptionTextBox), "Must be empty or at least 3 char");
         return !HasErrors;
 
     }

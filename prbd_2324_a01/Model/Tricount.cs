@@ -47,7 +47,7 @@ public class Tricount : EntityBase<PridContext>
         return Math.Round(totalExpenses, 2);
     }
 
-    internal double GetMyExpenses(int id) {
+    public double GetMyExpenses(int id) {
         double myExpenses = 0;
         foreach (Operation o in this.GetOperationsById(id)) {
             myExpenses += o.Amount;
@@ -65,6 +65,14 @@ public class Tricount : EntityBase<PridContext>
     }
     public IQueryable<Operation> GetOperationsById(int id) {
         return Context.Operations.Where(o => o.Tricount == this.Id && o.Initiator == id).OrderByDescending(o => o.OperationDate);
+    }
+
+    public List<User> GetAllUsers() {
+        List<User> users = new List<User>();
+        foreach (Subscription sub in Context.Subscriptions.Where(s => s.TricountId == this.Id)) {
+            users.Add(sub.User);
+        }
+        return users;
     }
 
     public Operation GetLastOperation() {

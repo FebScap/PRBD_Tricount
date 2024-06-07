@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
         <Menu>
             <MenuItem Header="Logout" Click="MenuLogout_Click"/>
-            <MenuItem Header="Reload" Command="" />
+            <MenuItem Header="Reload" Command="{Binding ReloadDataCommand}" />
             <MenuItem Header="Reset" Command="" />
         </Menu>
         <f:MyTabControl x:Name="tabControl" Margin="10" Grid.Row="1" HasCloseButton="True">

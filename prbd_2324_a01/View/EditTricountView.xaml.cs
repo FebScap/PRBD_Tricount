@@ -6,13 +6,14 @@ namespace prbd_2324_a01.View;
 
 public partial class EditTricountView : UserControlBase
 {
-    private Tricount tricount;
 
     public EditTricountView(Tricount tricount) {
         InitializeComponent();
-        
-        DataContext = new EditTricountViewModel(tricount, true);
-
-        this.tricount = tricount;
+        DataContext = new EditTricountViewModel(tricount);
     }
+    public EditTricountView() {
+        InitializeComponent();
+        DataContext = new EditTricountViewModel();
+    }
+
 }

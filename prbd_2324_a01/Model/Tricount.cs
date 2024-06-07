@@ -29,7 +29,6 @@ namespace prbd_2324_a01.Model
         }
 
         public Tricount() {
-            IsNew = true;
         }
 
         public static IQueryable<Tricount> GetAll() {

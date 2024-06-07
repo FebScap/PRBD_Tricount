@@ -9,11 +9,21 @@ namespace prbd_2324_a01.ViewModel
     public class TricountParticipantsViewModel : ViewModelBase<User, PridContext>
     {
         private Tricount _tricount;
+        public Tricount Tricount {
+            get => _tricount;
+            set => _tricount = value;
+        }
 
         public TricountParticipantsViewModel(Tricount tricount) {
-            _tricount = tricount;
+            Tricount = tricount;
             LoadParticipants();
             LoadAvailableUsers();
+            if (!Participants.Contains(CurrentUser)) {
+                Participants.Add(CurrentUser);
+                AvailableUsers.Remove(CurrentUser);
+                OwnerId = CurrentUser.Id;
+                NotifyColleagues(App.Messages.MSG_PARTICIPANTS_CHANGED, Participants);
+            }
             DeleteCommand = new RelayCommand<User>(DeleteParticipant, CanDeleteParticipant);
             AddCommand = new RelayCommand(AddParticipant, CanAddParticipant);
             AddMyselfCommand = new RelayCommand(AddMyself, CanAddMyself);
@@ -51,8 +61,7 @@ namespace prbd_2324_a01.ViewModel
 
         private void LoadParticipants() {
             Participants = new ObservableCollection<User>(_tricount.Subscriptions.Select(s => s.User));
-            OwnerId = _tricount.Creator;
-            Participants.Add(CurrentUser);
+            //OwnerId = _tricount.Creator;
         }
 
         private void LoadAvailableUsers() {
@@ -60,35 +69,25 @@ namespace prbd_2324_a01.ViewModel
             AvailableUsers = new ObservableCollection<User>(Context.Users.Where(u => !userIds.Contains(u.Id)).ToList());
         }
 
-
         private void DeleteParticipant(User participant) {
-            if (participant.Id == OwnerId) {
-                return;
-            }
-
-            var subscription = _tricount.Subscriptions.FirstOrDefault(s => s.UserId == participant.Id);
-            if (subscription != null) {
-                _tricount.Subscriptions.Remove(subscription);
-                Context.SaveChanges();
+            if (participant.Id != OwnerId) {
                 Participants.Remove(participant);
                 AvailableUsers.Add(participant);
+                NotifyColleagues(App.Messages.MSG_PARTICIPANTS_CHANGED, Participants);
             }
         }
-
         private bool CanDeleteParticipant(User participant) {
             return participant.Id != OwnerId;
         }
 
         private void AddParticipant() {
             if (SelectedUser != null) {
-                _tricount.Subscriptions.Add(new Subscription { User = SelectedUser, Tricount = _tricount });
-                Context.SaveChanges();
                 Participants.Add(SelectedUser);
                 AvailableUsers.Remove(SelectedUser);
                 SelectedUser = null;
             }
+            NotifyColleagues(App.Messages.MSG_PARTICIPANTS_CHANGED, Participants);
         }
-
         private bool CanAddParticipant() {
             return SelectedUser != null;
         }
@@ -96,11 +95,10 @@ namespace prbd_2324_a01.ViewModel
         private void AddMyself() {
             var currentUser = Context.Users.Find(CurrentUser.Id);
             if (currentUser != null && !Participants.Contains(currentUser)) {
-                _tricount.Subscriptions.Add(new Subscription { User = currentUser, Tricount = _tricount });
-                Context.SaveChanges();
                 Participants.Add(currentUser);
                 AvailableUsers.Remove(currentUser);
             }
+            NotifyColleagues(App.Messages.MSG_PARTICIPANTS_CHANGED, Participants);
         }
 
         private bool CanAddMyself() {
@@ -109,11 +107,11 @@ namespace prbd_2324_a01.ViewModel
 
         private void AddEverybody() {
             foreach (var user in AvailableUsers.ToList()) {
-                _tricount.Subscriptions.Add(new Subscription { User = user, Tricount = _tricount });
                 Participants.Add(user);
             }
-            Context.SaveChanges();
             AvailableUsers.Clear();
+            NotifyColleagues(App.Messages.MSG_PARTICIPANTS_CHANGED, Participants);
+
         }
     }
 }

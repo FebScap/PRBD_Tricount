@@ -37,10 +37,12 @@ public class ListTricountsViewModel : ViewModelBase<User, PridContext>
         DisplayTricountDetail = new RelayCommand<TricountCardViewModel>(vm => {
             NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, vm.Tricount);
         });
+
+        Register<Tricount>(App.Messages.MSG_TRICOUNT_CHANGED, tricount => OnRefreshData());
     }
 
     protected override void OnRefreshData() {
-        if (CurrentUser.Id != 5) {
+        if (CurrentUser.Role != 1) {
             List<Tricount> tricounts = string.IsNullOrEmpty(Filter) ? CurrentUser.GetAllTricount() : CurrentUser.GetAllTricountFiltered(Filter);
             Tricounts = new ObservableCollection<TricountCardViewModel>(tricounts.Select(t => new TricountCardViewModel(t)));
         } else {

@@ -33,20 +33,34 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         get => _tricount;
     }
 
-    public bool IsNew {
-        get => _isNew;
-    }
-
-    public string Title => IsNew ? "<New Tricount>" : Tricount.Title;
-    public string Description => StringBuilders.GetDescription(Tricount);
-    public string Creator => IsNew ? CurrentUser.FullName : Context.Users.Find(Tricount.Creator).FullName;
-    public string CreationDate => IsNew ? DateTime.Now.ToShortDateString() : Tricount.CreatedAt.ToShortDateString();
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public string Creator { get; set; }
+    public DateTime CreationDate { get; set; }
     public TricountParticipantsViewModel TricountParticipants { get; set; }
 
-    public EditTricountViewModel(Tricount tricount, bool isNew) : base() {
+    public EditTricountViewModel(Tricount tricount) : base() {
+        OnRefreshData();
         _tricount = tricount;
-        _isNew = isNew;
-        TricountParticipants = new TricountParticipantsViewModel(tricount); // Initialisez ici
+        Title = tricount.Title;
+        Description = tricount.Description; 
+        Creator = "Boris";
+        CreationDate = tricount.CreatedAt;
+
+        TricountParticipants = new TricountParticipantsViewModel(tricount);
+        SaveCommand = new RelayCommand(SaveTricountAction, CanSave);
+        CancelCommand = new RelayCommand(CancelButtonAction);
+    }
+
+    public EditTricountViewModel() : base() {
+        OnRefreshData();
+        Tricount tricount = new Tricount();
+        Title = "New Tricount";
+        Description = "No Description";
+        Creator = CurrentUser.FullName;
+        CreationDate = DateTime.Now;
+
+        TricountParticipants = new TricountParticipantsViewModel(tricount);
         SaveCommand = new RelayCommand(SaveTricountAction, CanSave);
         CancelCommand = new RelayCommand(CancelButtonAction);
     }
@@ -55,6 +69,9 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         if (Validate()) {
             var tricount = new Tricount(TitleTextBox, DescriptionTextBox, App.CurrentUser.Id);
             tricount.Add();
+            RaisePropertyChanged();
+            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, tricount);
+            NotifyColleagues(App.Messages.MSG_CLOSE_TAB, tricount);
             NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, tricount);
         }
     }
@@ -92,5 +109,9 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
 
     public override bool Validate() {
        return ValidateTitle() && ValidateDescription();
+    }
+
+    protected override void OnRefreshData() {
+        
     }
 }

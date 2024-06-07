@@ -63,6 +63,11 @@ namespace prbd_2324_a01.Model
             Context.SaveChanges();
         }
 
+        public void Update() {
+            Context.Tricounts.Update(this);
+            Context.SaveChanges();
+        }
+
         public IQueryable<Operation> GetAllOperations() {
             return Context.Operations.Where(o => o.Tricount == this.Id).OrderByDescending(o => o.OperationDate).OrderByDescending(o => o.Id);
         }
@@ -117,6 +122,11 @@ namespace prbd_2324_a01.Model
                 balances[operation.Initiator] += operation.Amount; // Montant total imputé au payeur
             }
             return balances;
+        }
+
+        public void Delete() {
+            Context.Tricounts.Remove(this);
+            Context.SaveChanges();
         }
     }
 }

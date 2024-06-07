@@ -40,14 +40,20 @@ public partial class MainView : WindowBase
     }
 
     private void DoEditTricount(Tricount tricount) {
-            OpenTab(tricount.Title, () => new EditTricountView(tricount));
+        Console.WriteLine(tricount.Title);
+        DoCloseTab(tricount);
+        OpenTab(tricount.Title, () => new EditTricountView(tricount));
     }
     private void DoAddTricount() {
         OpenTab("<New Tricount>", () => new EditTricountView());
     }
 
     private void DoDeleteTricount(Tricount tricount) {
-        throw new NotImplementedException();
+        if (App.ShowDialog<DeleteTricountViewModel, User, PridContext>(tricount) is Tricount t) {
+            DoCloseTab(tricount);
+            t.Delete();
+            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, t);
+        }
     }
 
     private void DoDisplayTricount(Tricount tricount) {

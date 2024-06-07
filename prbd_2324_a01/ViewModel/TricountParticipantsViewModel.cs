@@ -60,7 +60,7 @@ namespace prbd_2324_a01.ViewModel
         public ICommand AddEverybodyCommand { get; private set; }
 
         private void LoadParticipants() {
-            Participants = new ObservableCollection<User>(_tricount.Subscriptions.Select(s => s.User));
+            Participants = new ObservableCollection<User>(Tricount.Participants);
             //OwnerId = Tricount.Creator;
         }
 

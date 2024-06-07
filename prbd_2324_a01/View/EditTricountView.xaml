@@ -56,9 +56,10 @@
             <DatePicker Grid.Row="2" Grid.Column="1" x:Name="txtDate" FontSize="14" VerticalAlignment="Center" Padding="3" SelectedDate="{x:Static sys:DateTime.Now}"
                 DisplayDateEnd="{x:Static sys:DateTime.Now}"/>
         </Grid>
-        <Grid Grid.Row="3">
+        <StackPanel Grid.Row="3" MaxWidth="200">
+            <Label x:Name="labelParticipants" Content="Participants :" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" Padding="5" Margin="0,10,0,10" />
             <vw:TricountParticipantsView x:Name="Participants" DataContext="{Binding TricountParticipants}" />
-        </Grid>
+        </StackPanel>
 
         <WrapPanel Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Width="auto">
 

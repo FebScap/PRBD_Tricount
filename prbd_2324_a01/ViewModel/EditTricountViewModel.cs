@@ -116,7 +116,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
             AddError(nameof(TitleTextBox), "required");
         else if (TitleTextBox.Length < 3)
             AddError(nameof(TitleTextBox), "length minimum is 3");
-        else if (!CurrentUser.IsTitleUnique(TitleTextBox) && Tricount.Title!=TitleTextBox)
+        else if (!CurrentUser.IsTitleUnique(TitleTextBox))
             AddError(nameof(TitleTextBox), "Must be unique per user");
 
         return !HasErrors;

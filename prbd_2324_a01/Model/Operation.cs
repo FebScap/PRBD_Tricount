@@ -27,4 +27,35 @@ public class Operation : EntityBase<PridContext>
     }
 
     public Operation() { }
+
+    public User GetInitiator() {
+        return Context.Users.Find(this.Initiator);
+    }
+    
+    private double GetTotalWeight() {
+            return Repartitions.Sum(r => r.Weight);
+    }
+    public Dictionary<int, double> GetParticipantShares() {
+        var totalWeight = GetTotalWeight();
+        var shares = new Dictionary<int, double>();
+
+        foreach (var repartition in Repartitions) {
+            var user = repartition.User.Id;
+            var share = (repartition.Weight / totalWeight) * Amount;
+            shares[user] = share;
+        }
+        return shares;
+    }
+
+    public void Add() {
+        Context.Operations.Add(this);
+        Context.SaveChanges();
+    }
+
+    public void Update() {
+        Context.Operations.Update(this);
+        Context.SaveChanges();
+    }
+
+
 }

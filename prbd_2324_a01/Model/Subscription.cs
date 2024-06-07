@@ -22,5 +22,5 @@ public class Subscription : EntityBase<PridContext>
         TricountId = tricount;
     }
 
-    public Subscription() { }
+    public Subscription() {}
 }

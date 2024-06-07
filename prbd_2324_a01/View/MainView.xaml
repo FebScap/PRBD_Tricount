@@ -5,16 +5,31 @@
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
               xmlns:vm="clr-namespace:prbd_2324_a01.ViewModel"
+              xmlns:vw="clr-namespace:prbd_2324_a01.View"
               mc:Ignorable="d"
               d:DataContext="{d:DesignInstance Type=vm:MainViewModel, IsDesignTimeCreatable=True}"
               WindowStartupLocation="CenterScreen"
-              Title="MainView" Height="400" Width="600">
+              Title="{Binding Title}" Height="800" Width="1200">
 
     <Window.DataContext>
         <vm:MainViewModel x:Name="vm" />
     </Window.DataContext>
 
-    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="32"
-           Text="{Binding Title}" />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Menu>
+            <MenuItem Header="Logout" Click="MenuLogout_Click"/>
+            <MenuItem Header="Reload" Command="{Binding ReloadDataCommand}" />
+            <MenuItem Header="Reset" Command="" />
+        </Menu>
+        <f:MyTabControl x:Name="tabControl" Margin="10" Grid.Row="1" HasCloseButton="True">
+            <TabItem x:Name="tricountsTab" Header="My Tricounts" Tag="Tricounts">
+                <vw:ListTricountsView/>
+            </TabItem>
+        </f:MyTabControl>
+    </Grid>
 
 </f:WindowBase>

@@ -18,7 +18,8 @@ public partial class App : ApplicationBase<User, PridContext> {
         MSG_DO_SIGNUP,
         MSG_TRICOUNT_CHANGED,
         MSG_NEW_TRICOUNT,
-        MSG_PARTICIPANTS_CHANGED
+        MSG_PARTICIPANTS_CHANGED,
+        MSG_TITLE_CHANGED
     }
 
     public App() {

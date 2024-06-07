@@ -61,7 +61,7 @@ namespace prbd_2324_a01.ViewModel
 
         private void LoadParticipants() {
             Participants = new ObservableCollection<User>(_tricount.Subscriptions.Select(s => s.User));
-            //OwnerId = _tricount.Creator;
+            //OwnerId = Tricount.Creator;
         }
 
         private void LoadAvailableUsers() {

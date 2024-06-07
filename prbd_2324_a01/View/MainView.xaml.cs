@@ -12,11 +12,13 @@ public partial class MainView : WindowBase
         Register<Tricount>(App.Messages.MSG_EDIT_TRICOUNT,
            tricount => DoEditTricount(tricount));
 
-        Register<Tricount>(App.Messages.MSG_NEW_TRICOUNT,
-           tricount => DoAddTricount());
+        Register(App.Messages.MSG_NEW_TRICOUNT, () => DoAddTricount());
 
         Register<Tricount>(App.Messages.MSG_DISPLAY_TRICOUNT,
             tricount => DoDisplayTricount(tricount));
+
+        Register<Tricount>(App.Messages.MSG_TITLE_CHANGED,
+            tricount => DoRenameTab(string.IsNullOrEmpty(tricount.Title) ? "<New Member>" : tricount.Title));
 
         Register<Tricount>(App.Messages.MSG_CLOSE_TAB,
            tricount => DoCloseTab(tricount));
@@ -30,7 +32,7 @@ public partial class MainView : WindowBase
             OpenTab(tricount.Title, () => new EditTricountView(tricount));
     }
     private void DoAddTricount() {
-        OpenTab("New Tricount", () => new EditTricountView());
+        OpenTab("<New Tricount>", () => new EditTricountView());
     }
 
     private void DoDisplayTricount(Tricount tricount) {
@@ -45,6 +47,12 @@ public partial class MainView : WindowBase
             tabControl.Add(createView(), header, header);
         else
             tabControl.SetFocus(tab);
+    }
+    private void DoRenameTab(string header) {
+        if (tabControl.SelectedItem is TabItem tab) {
+            MyTabControl.RenameTab(tab, header);
+            tab.Tag = header;
+        }
     }
 
     private void MenuLogout_Click(object sender, System.Windows.RoutedEventArgs e) {

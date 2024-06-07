@@ -26,11 +26,11 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         set => SetProperty(ref _descriptionTextBox, value, () => Validate());
     }
 
-    private readonly Tricount _tricount;
-    private readonly bool _isNew;
+    private Tricount _tricount;
 
     public Tricount Tricount {
         get => _tricount;
+        set => SetProperty(ref _tricount, value);
     }
 
     public string Title { get; set; }
@@ -44,7 +44,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         _tricount = tricount;
         Title = tricount.Title;
         Description = tricount.Description; 
-        Creator = "Boris";
+        Creator = User.GetUserById(tricount.Creator).FullName;
         CreationDate = tricount.CreatedAt;
 
         TricountParticipants = new TricountParticipantsViewModel(tricount);
@@ -55,7 +55,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
     public EditTricountViewModel() : base() {
         OnRefreshData();
         Tricount tricount = new Tricount();
-        Title = "New Tricount";
+        Title = "<New Tricount>";
         Description = "No Description";
         Creator = CurrentUser.FullName;
         CreationDate = DateTime.Now;
@@ -69,6 +69,10 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         if (Validate()) {
             var tricount = new Tricount(TitleTextBox, DescriptionTextBox, App.CurrentUser.Id);
             tricount.Add();
+            foreach (var p in TricountParticipants.Participants) {
+                Context.Subscriptions.Add(new Subscription(p.Id, tricount.Id));
+                Context.SaveChanges();
+            }
             RaisePropertyChanged();
             NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, tricount);
             NotifyColleagues(App.Messages.MSG_CLOSE_TAB, tricount);
@@ -77,6 +81,8 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
     }
 
     private void CancelButtonAction() {
+        Tricount.Title = "<New Tricount>";
+        NotifyColleagues(App.Messages.MSG_TITLE_CHANGED, Tricount);
         NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
     }
 

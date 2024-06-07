@@ -118,5 +118,10 @@ namespace prbd_2324_a01.Model
             }
             return balances;
         }
+
+        public void Delete() {
+            Context.Tricounts.Remove(this);
+            Context.SaveChanges();
+        }
     }
 }

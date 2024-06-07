@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace prbd_2324_a01.ViewModel;
+namespace prbd_2324_a01.ViewModel; 
 
 public class DisplayTricountViewModel : ViewModelBase<User, PridContext>
 {
@@ -30,6 +30,11 @@ public class DisplayTricountViewModel : ViewModelBase<User, PridContext>
     public Tricount Tricount {
         get => _tricount;
     }
+    
+    public ICommand DisplayEditOperation { get; set; }
+    public ICommand AddOperationCommand { get; set; }
+    public ICommand EditCommand { get; set; }
+    public ICommand DeleteCommand { get; set; }
 
     public string Title => Tricount.Title;
     public string Description => StringBuilders.GetDescription(Tricount);
@@ -40,6 +45,22 @@ public class DisplayTricountViewModel : ViewModelBase<User, PridContext>
         _tricount = tricount;
 
         OnRefreshData();
+
+        DisplayEditOperation = new RelayCommand<OperationCardViewModel>(vm => {
+            NotifyColleagues(App.Messages.MSG_EDIT_OPERATION, vm.Operation);
+        });
+
+        AddOperationCommand = new RelayCommand<Tricount>(tricount => {
+            NotifyColleagues(App.Messages.MSG_ADD_OPERATION, Tricount);
+        });
+
+        EditCommand = new RelayCommand<Tricount>(tricount => {
+            NotifyColleagues(App.Messages.MSG_EDIT_TRICOUNT, Tricount);
+        });
+
+        DeleteCommand = new RelayCommand<Tricount>(tricount => {
+            NotifyColleagues(App.Messages.MSG_DELETE_TRICOUNT, Tricount);
+        });
     }
 
     protected override void OnRefreshData() {

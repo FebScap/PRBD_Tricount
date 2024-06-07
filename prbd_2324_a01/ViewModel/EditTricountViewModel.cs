@@ -75,15 +75,13 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
             }
             RaisePropertyChanged();
             NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, tricount);
-            NotifyColleagues(App.Messages.MSG_CLOSE_TAB, tricount);
+            NotifyColleagues(App.Messages.MSG_CLOSE_TAB, new Tricount());
             NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, tricount);
         }
     }
 
     private void CancelButtonAction() {
-        Tricount.Title = "<New Tricount>";
-        NotifyColleagues(App.Messages.MSG_TITLE_CHANGED, Tricount);
-        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
+        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, new Tricount());
     }
 
     private bool CanSave() {

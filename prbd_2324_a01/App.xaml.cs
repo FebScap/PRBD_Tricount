@@ -19,7 +19,12 @@ public partial class App : ApplicationBase<User, PridContext> {
         MSG_TRICOUNT_CHANGED,
         MSG_NEW_TRICOUNT,
         MSG_PARTICIPANTS_CHANGED,
-        MSG_TITLE_CHANGED
+        MSG_TITLE_CHANGED,
+        MSG_EDIT_OPERATION,
+        MSG_ADD_OPERATION,
+        MSG_DELETE_TRICOUNT,
+        MSG_DELETE_OPERATION,
+        MSG_SAVE_OPERATION
     }
 
     public App() {

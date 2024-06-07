@@ -16,6 +16,10 @@ public partial class DisplayTricountView : UserControlBase
         this.tricount = tricount;
     }
 
+   
+
+  
+
     private void btnAddOperation_Click(object sender, System.Windows.RoutedEventArgs e) {
 
     }

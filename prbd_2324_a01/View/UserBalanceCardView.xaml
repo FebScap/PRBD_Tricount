@@ -14,33 +14,29 @@
         </Grid.ColumnDefinitions>
 
         <!-- Affichage Du prix à GAUCHE (balance négative) -->
+        <Border Visibility="{Binding NegativeVisibility}" Width="{Binding BorderWidth}" Background="Tomato" HorizontalAlignment="Right" Padding="15,0" CornerRadius="5"></Border>
+        <TextBlock Visibility="{Binding NegativeVisibility}" FontSize="16" Margin="0,0,15,0"  FontWeight="Bold" TextAlignment="Right" Text="{Binding Amount}" />
 
-        <Border Visibility="{Binding NegativeVisibility}" Margin="0,0,15,0" Background="Tomato" Width="{Binding BorderWidth}" HorizontalAlignment="Right" Padding="5,0,5,0" CornerRadius="5">
-            <TextBlock FontSize="16"  FontWeight="Bold" TextAlignment="Right" Text="{Binding Amount}" />
-        </Border>
-
-        <!-- Affichage du pseudo à GAUGE (balance négative) -->
-        <StackPanel Visibility="{Binding PositiveVisibility}" Margin="0,0,15,0" HorizontalAlignment="Stretch">
+        <!-- Affichage du pseudo à GAUGE (balance positive) -->
+        <StackPanel Visibility="{Binding PositiveVisibility}" Margin="0,0,15,0" HorizontalAlignment="Right">
             <DockPanel Visibility="{Binding isSelfUserVisibility}">
                 <TextBlock FontSize="16" TextAlignment="Right" Text="{Binding UserName}"/>
-                <TextBlock FontSize="16" FontWeight="Bold" Margin="5,0,0,0" TextAlignment="Right" Text="(me)"/>
+                <TextBlock FontSize="16" FontWeight="Bold" Margin="5,0,0,0" Text="(me)"/>
             </DockPanel>
-            <TextBlock Visibility="{Binding isNotSelfUserVisibility}" FontSize="16" TextAlignment="Right" Text="{Binding UserName}"/>
+            <TextBlock Visibility="{Binding isNotSelfUserVisibility}" FontSize="16" Text="{Binding UserName}"/>
         </StackPanel>
 
         <!-- Affichage Du prix à DROITE (balance positive) -->
-        <Canvas HorizontalAlignment="Stretch" Grid.Column="1" Visibility="{Binding PositiveVisibility}">
-            <Border Background="SpringGreen"  Width="{Binding BorderWidth}" HorizontalAlignment="Left" Padding="5,0,5,0" CornerRadius="5"></Border>
-            <TextBlock FontSize="16" FontWeight="Bold" TextAlignment="Left" Width="auto" Text="{Binding Amount}"/>
-        </Canvas>
+        <Border Grid.Column="1" Visibility="{Binding PositiveVisibility}" Width="{Binding BorderWidth}" Background="SpringGreen" HorizontalAlignment="Left" Padding="15,0" CornerRadius="5"></Border>
+        <TextBlock Grid.Column="1" Visibility="{Binding PositiveVisibility}" Margin="5,0,0,0" FontSize="16" FontWeight="Bold" TextAlignment="Left" Width="auto" Text="{Binding Amount}"/>
 
-        <!-- Affichage du pseudo à DROITE (balance positive) -->
-        <StackPanel Grid.Column="1" Visibility="{Binding NegativeVisibility}" HorizontalAlignment="Stretch">
+        <!-- Affichage du pseudo à DROITE (balance négative) -->
+        <StackPanel Grid.Column="1" Visibility="{Binding NegativeVisibility}" HorizontalAlignment="Left">
             <DockPanel Visibility="{Binding isSelfUserVisibility}">
                 <TextBlock FontSize="16" TextAlignment="Left" Text="{Binding UserName}"/>
-                <TextBlock FontSize="16" FontWeight="Bold" Margin="5,0,0,0" TextAlignment="Left" Text="(me)"/>
+                <TextBlock FontSize="16" FontWeight="Bold" Margin="5,0,0,0" Text="(me)"/>
             </DockPanel>
-            <TextBlock Visibility="{Binding isNotSelfUserVisibility}" FontSize="16" TextAlignment="Left" Text="{Binding UserName}"/>
+            <TextBlock Visibility="{Binding isNotSelfUserVisibility}" FontSize="16" Text="{Binding UserName}"/>
         </StackPanel>
     </Grid>
 </f:UserControlBase>

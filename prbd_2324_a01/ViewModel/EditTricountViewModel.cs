@@ -41,12 +41,14 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
     public string Description => StringBuilders.GetDescription(Tricount);
     public string Creator => IsNew ? CurrentUser.FullName : Context.Users.Find(Tricount.Creator).FullName;
     public string CreationDate => IsNew ? DateTime.Now.ToShortDateString() : Tricount.CreatedAt.ToShortDateString();
+    public TricountParticipantsViewModel TricountParticipants { get; set; }
 
     public EditTricountViewModel(Tricount tricount, bool isNew) : base() {
         _tricount = tricount;
         _isNew = isNew;
+        TricountParticipants = new TricountParticipantsViewModel(tricount); // Initialisez ici
         SaveCommand = new RelayCommand(SaveTricountAction, CanSave);
-        CancelCommand = new RelayCommand(CancelAction);
+        CancelCommand = new RelayCommand(CancelButtonAction);
     }
 
     private void SaveTricountAction() {
@@ -57,7 +59,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         }
     }
 
-    private void CancelAction() {
+    private void CancelButtonAction() {
         NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
     }
 

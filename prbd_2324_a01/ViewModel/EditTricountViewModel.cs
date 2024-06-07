@@ -69,30 +69,12 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
 
     private void SaveTricountAction() {
         if (Validate()) {
-            Tricount tricount;
-            if (Tricount == null) {
-                tricount = new Tricount(TitleTextBox, DescriptionTextBox, App.CurrentUser.Id);
-            } else {
-                tricount = Tricount;
-                Tricount.Title = TitleTextBox;
-                Tricount.Description = DescriptionTextBox;
-                //Tricount.CreatedAt = Modif date ici
-            }
+            var tricount = new Tricount(TitleTextBox, DescriptionTextBox, App.CurrentUser.Id);
+            tricount.Add();
             foreach (var p in TricountParticipants.Participants) {
-                if (!tricount.Participants.Contains(p))
-                    Context.Subscriptions.Add(new Subscription(p.Id, tricount.Id));
+                Context.Subscriptions.Add(new Subscription(p.Id, tricount.Id));
+                Context.SaveChanges();
             }
-            foreach (var p in Tricount.Participants) {
-                if (!TricountParticipants.Participants.Contains(p)) {
-                    Subscription sub = Context.Subscriptions.Find(p.Id, tricount.Id);
-                    Context.Subscriptions.Remove(sub);
-                }
-            }
-            if (Tricount == null)
-                tricount.Add();
-            else
-                Tricount.Update();
-            Context.SaveChanges();
             RaisePropertyChanged();
             NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, tricount);
             NotifyColleagues(App.Messages.MSG_CLOSE_TAB, new Tricount());

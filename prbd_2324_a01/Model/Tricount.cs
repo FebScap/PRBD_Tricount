@@ -31,6 +31,9 @@ public class Tricount : EntityBase<PridContext>
     public static IQueryable<Tricount> GetAll() {
         return Context.Tricounts;
     }
+    public static Tricount GetTricountById(int id) {
+        return Context.Tricounts.Find(id);
+    }
 
     public static IQueryable<Tricount> GetAllFiltered(string Filter) {
         var filtered = from t in Context.Tricounts

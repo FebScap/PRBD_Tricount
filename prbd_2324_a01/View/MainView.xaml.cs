@@ -49,10 +49,10 @@ public partial class MainView : WindowBase
     }
 
     private void DoAddOperation(Tricount tricount) {
-        new AddOperationView(tricount).ShowDialog();
+        new ViewOperationView(tricount).ShowDialog();
     }
     private void DoEditOperation(Model.Operation operation) {
-        new EditOperationView(operation).ShowDialog();
+        new ViewOperationView(operation).ShowDialog();
     }
 
     private void OpenTab(string header, Func<UserControlBase> createView) {

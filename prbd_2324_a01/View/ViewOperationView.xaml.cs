@@ -1,4 +1,5 @@
-﻿using PRBD_Framework;
+﻿using prbd_2324_a01.Model;
+using PRBD_Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,13 @@ using System.Windows.Shapes;
 
 namespace prbd_2324_a01.View
 {
-    public partial class AddOperationView : DialogWindowBase
+    public partial class ViewOperationView : DialogWindowBase
     {
-        public AddOperationView(Model.Tricount tricount) {
+        public ViewOperationView(Operation operation) {
+            InitializeComponent();
+        }
+
+        public ViewOperationView(Model.Tricount tricount) {
             InitializeComponent();
         }
     }

@@ -18,7 +18,9 @@ public partial class App : ApplicationBase<User, PridContext> {
         MSG_DO_SIGNUP,
         MSG_EDIT_OPERATION,
         MSG_ADD_OPERATION,
-        MSG_DELETE_TRICOUNT
+        MSG_DELETE_TRICOUNT,
+        MSG_DELETE_OPERATION,
+        MSG_SAVE_OPERATION
     }
 
     public App() {

@@ -47,5 +47,15 @@ public class Operation : EntityBase<PridContext>
         return shares;
     }
 
+    public void Add() {
+        Context.Operations.Add(this);
+        Context.SaveChanges();
+    }
+
+    public void Update() {
+        Context.Operations.Update(this);
+        Context.SaveChanges();
+    }
+
 
 }

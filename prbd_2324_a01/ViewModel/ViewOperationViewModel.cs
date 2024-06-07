@@ -104,6 +104,19 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
         AddSaveCommand = new RelayCommand(() => {
             DialogResult = Operation;
             NotifyColleagues(App.Messages.MSG_SAVE_OPERATION, new Tricount());
+            if (Operation != null) {
+                Operation.Title = TitleTextBox;
+                Operation.Amount = Double.Parse(AmountTextBox);
+                Operation.OperationDate = CreationDate;
+                Operation.Update();
+                
+            } else {
+                Operation = new Operation();
+                Operation.Title = TitleTextBox;
+                Operation.Amount = Double.Parse(AmountTextBox);
+                Operation.OperationDate = CreationDate;
+                Operation.Add();
+            }
         }, Validate);
         CancelCommand = new RelayCommand(() => {
             DialogResult = null;

@@ -32,10 +32,10 @@
             <TextBox x:Name="txtTitle" Grid.Column="1" FontSize="14" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="3,0" Padding="2" Text="{Binding TitleTextBox, UpdateSourceTrigger=PropertyChanged}" />
 
             <Label x:Name="labelAmount" Grid.Row="1" Margin="0,5" Content="Amount :" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" />
-            <TextBox x:Name="txtAmount" Grid.Row="1" Grid.Column="1" FontSize="14" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="3,0" Padding="2" Text="{Binding AmountTextBox, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Row="1" Grid.Column="1" Name="NumberTextBox" FontSize="14" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="3,0" Padding="2" Text="{Binding AmountTextBox, UpdateSourceTrigger=PropertyChanged}" />
 
             <Label x:Name="labelInitiator" Grid.Row="2" Margin="0,5" Content="Initiator :" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" />
-            <ComboBox x:Name="comboInitiator" Grid.Row="2" Grid.Column="1" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="3,0" Padding="2" Text="{Binding InitiatorBox, UpdateSourceTrigger=PropertyChanged}" />
+            <ComboBox x:Name="comboInitiator" Grid.Row="2" Grid.Column="1" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="3,0" Padding="2" ItemsSource="{Binding Participants}" SelectedItem="{Binding ThisUser}" DisplayMemberPath="FullName" />
 
             <Label Grid.Row="3" x:Name="labelDate" Margin="0,5" Content="Date :" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" />
             <DatePicker Grid.Row="3" Grid.Column="1" x:Name="txtDate" FontSize="14" VerticalAlignment="Center" Margin="3,0" Padding="2" SelectedDate="{x:Static sys:DateTime.Now}" DisplayDateEnd="{x:Static sys:DateTime.Now}"></DatePicker>

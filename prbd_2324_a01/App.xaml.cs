@@ -24,7 +24,12 @@ public partial class App : ApplicationBase<User, PridContext> {
         MSG_ADD_OPERATION,
         MSG_DELETE_TRICOUNT,
         MSG_DELETE_OPERATION,
-        MSG_SAVE_OPERATION
+        MSG_SAVE_OPERATION,
+        MSG_WEIGHT_DECREASED,
+        MSG_WEIGHT_INCREASED,
+        MSG_TOTALWEIGHT_CHANGED,
+        MSG_OPERATION_AMOUNT_CHANGED,
+        MSG_WEIGHT_REMOVED
     }
 
     public App() {

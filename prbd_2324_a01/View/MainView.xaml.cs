@@ -12,13 +12,18 @@ public partial class MainView : WindowBase
         InitializeComponent();
 
         Register<Tricount>(App.Messages.MSG_EDIT_TRICOUNT,
-           tricount => DoEditTricount(tricount, tricount.IsNew));
+           tricount => DoEditTricount(tricount));
+
+        Register(App.Messages.MSG_NEW_TRICOUNT, () => DoAddTricount());
 
         Register<Tricount>(App.Messages.MSG_DELETE_TRICOUNT,
         tricount => DoDeleteTricount(tricount));
 
         Register<Tricount>(App.Messages.MSG_DISPLAY_TRICOUNT,
             tricount => DoDisplayTricount(tricount));
+
+        Register<Tricount>(App.Messages.MSG_TITLE_CHANGED,
+            tricount => DoRenameTab(string.IsNullOrEmpty(tricount.Title) ? "<New Member>" : tricount.Title));
 
         Register<Tricount>(App.Messages.MSG_CLOSE_TAB,
            tricount => DoCloseTab(tricount));
@@ -34,9 +39,11 @@ public partial class MainView : WindowBase
         tabControl.CloseByTag(string.IsNullOrEmpty(tricount.Title) ? "<New Tricount>" : tricount.Title);
     }
 
-    private void DoEditTricount(Tricount tricount, bool isNew) {
-        if (tricount != null)
-            OpenTab(isNew ? "<New Tricount>" : tricount.Title, () => new EditTricountView(tricount));
+    private void DoEditTricount(Tricount tricount) {
+            OpenTab(tricount.Title, () => new EditTricountView(tricount));
+    }
+    private void DoAddTricount() {
+        OpenTab("<New Tricount>", () => new EditTricountView());
     }
 
     private void DoDeleteTricount(Tricount tricount) {
@@ -61,6 +68,12 @@ public partial class MainView : WindowBase
             tabControl.Add(createView(), header, header);
         else
             tabControl.SetFocus(tab);
+    }
+    private void DoRenameTab(string header) {
+        if (tabControl.SelectedItem is TabItem tab) {
+            MyTabControl.RenameTab(tab, header);
+            tab.Tag = header;
+        }
     }
 
     private void MenuLogout_Click(object sender, System.Windows.RoutedEventArgs e) {

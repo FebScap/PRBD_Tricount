@@ -16,6 +16,11 @@ public partial class App : ApplicationBase<User, PridContext> {
         MSG_CLOSE_TAB,
         MSG_SIGNUP,
         MSG_DO_SIGNUP,
+        MSG_TRICOUNT_CHANGED,
+        MSG_NEW_TRICOUNT,
+        MSG_PARTICIPANTS_CHANGED,
+        MSG_TITLE_CHANGED
+        MSG_DO_SIGNUP,
         MSG_EDIT_OPERATION,
         MSG_ADD_OPERATION,
         MSG_DELETE_TRICOUNT,

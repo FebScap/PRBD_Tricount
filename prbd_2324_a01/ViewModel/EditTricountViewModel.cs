@@ -26,38 +26,63 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         set => SetProperty(ref _descriptionTextBox, value, () => Validate());
     }
 
-    private readonly Tricount _tricount;
-    private readonly bool _isNew;
+    private Tricount _tricount;
 
     public Tricount Tricount {
         get => _tricount;
+        set => SetProperty(ref _tricount, value);
     }
 
-    public bool IsNew {
-        get => _isNew;
-    }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public string Creator { get; set; }
+    public DateTime CreationDate { get; set; }
+    public TricountParticipantsViewModel TricountParticipants { get; set; }
 
-    public string Title => IsNew ? "<New Tricount>" : Tricount.Title;
-    public string Description => StringBuilders.GetDescription(Tricount);
-    public string Creator => IsNew ? CurrentUser.FullName : Context.Users.Find(Tricount.Creator).FullName;
-    public string CreationDate => IsNew ? DateTime.Now.ToShortDateString() : Tricount.CreatedAt.ToShortDateString();
-
-    public EditTricountViewModel(Tricount tricount, bool isNew) : base() {
+    public EditTricountViewModel(Tricount tricount) : base() {
+        OnRefreshData();
         _tricount = tricount;
-        _isNew = isNew;
+        Title = tricount.Title;
+        Description = tricount.Description; 
+        Creator = User.GetUserById(tricount.Creator).FullName;
+        CreationDate = tricount.CreatedAt;
+
+        TricountParticipants = new TricountParticipantsViewModel(tricount);
         SaveCommand = new RelayCommand(SaveTricountAction, CanSave);
-        CancelCommand = new RelayCommand(CancelAction);
+        CancelCommand = new RelayCommand(CancelButtonAction);
+    }
+
+    public EditTricountViewModel() : base() {
+        OnRefreshData();
+        Tricount tricount = new Tricount();
+        Title = "<New Tricount>";
+        Description = "No Description";
+        Creator = CurrentUser.FullName;
+        CreationDate = DateTime.Now;
+
+        TricountParticipants = new TricountParticipantsViewModel(tricount);
+        SaveCommand = new RelayCommand(SaveTricountAction, CanSave);
+        CancelCommand = new RelayCommand(CancelButtonAction);
     }
 
     private void SaveTricountAction() {
         if (Validate()) {
             var tricount = new Tricount(TitleTextBox, DescriptionTextBox, App.CurrentUser.Id);
             tricount.Add();
+            foreach (var p in TricountParticipants.Participants) {
+                Context.Subscriptions.Add(new Subscription(p.Id, tricount.Id));
+                Context.SaveChanges();
+            }
+            RaisePropertyChanged();
+            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, tricount);
+            NotifyColleagues(App.Messages.MSG_CLOSE_TAB, tricount);
             NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, tricount);
         }
     }
 
-    private void CancelAction() {
+    private void CancelButtonAction() {
+        Tricount.Title = "<New Tricount>";
+        NotifyColleagues(App.Messages.MSG_TITLE_CHANGED, Tricount);
         NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
     }
 
@@ -90,5 +115,9 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
 
     public override bool Validate() {
        return ValidateTitle() && ValidateDescription();
+    }
+
+    protected override void OnRefreshData() {
+        
     }
 }

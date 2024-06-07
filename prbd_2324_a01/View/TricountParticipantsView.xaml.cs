@@ -18,7 +18,7 @@ using System.Windows.Shapes;
 
 namespace prbd_2324_a01.View
 {
-    public partial class TricountParticipantsView : UserControl
+    public partial class TricountParticipantsView : UserControlBase
     {
         public TricountParticipantsView() {
             InitializeComponent();

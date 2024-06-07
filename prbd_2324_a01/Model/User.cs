@@ -33,7 +33,6 @@ public class User : EntityBase<PridContext>
     }
 
     public bool IsTitleUnique(string title) {
-        Console.WriteLine("unique");
         var Tricounts = GetAllOwnedTricount();
         foreach (var tricount in Tricounts) {
             if (tricount.Title == title) return false;

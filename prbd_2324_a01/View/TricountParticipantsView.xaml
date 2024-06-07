@@ -1,56 +1,46 @@
 ﻿<f:UserControlBase x:Class="prbd_2324_a01.View.TricountParticipantsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
              xmlns:vm="clr-namespace:prbd_2324_a01.ViewModel"
              xmlns:vw="clr-namespace:prbd_2324_a01.View"
-             mc:Ignorable="d"
+             mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:TricountParticipantsViewModel, IsDesignTimeCreatable=False}">
 
-    <StackPanel>
-        <ListView x:Name="listView" ItemsSource="{Binding Participants}" Padding="5" BorderBrush="Transparent" SelectionMode="Single" ScrollViewer.CanContentScroll="True">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                    <Setter Property="Margin" Value="2"></Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel></StackPanel>
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
-            <ListView.ItemTemplate>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Liste des participants -->
+        <ListBox Grid.Row="0" ItemsSource="{Binding Participants}">
+            <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding FullName}" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <Button Content="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding}">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="IsEnabled" Value="True"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding DataContext.OwnerId, RelativeSource={RelativeSource AncestorType=ListView}}" Value="{Binding Id}">
-                                            <Setter Property="IsEnabled" Value="False"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding FullName}"/>
+                        <Button Content="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                CommandParameter="{Binding}"/>
                     </StackPanel>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
-        <ComboBox ItemsSource="{Binding AvailableUsers}" SelectedItem="{Binding SelectedUser}" DisplayMemberPath="FullName" Margin="0,10,0,0"/>
+        <!-- ComboBox des utilisateurs non participants -->
+        <ComboBox Grid.Row="1" ItemsSource="{Binding AvailableUsers}" SelectedItem="{Binding SelectedUser}" DisplayMemberPath="FullName"/>
 
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-            <Button Content="Add" Command="{Binding AddCommand}" IsEnabled="{Binding Path=SelectedUser, Converter={StaticResource NullToBooleanConverter}}" Margin="0,0,10,0"/>
-            <Button Content="Add Myself" Command="{Binding AddMyselfCommand}" Margin="0,0,10,0"/>
-            <Button Content="Add Everybody" Command="{Binding AddEverybodyCommand}" />
-        </StackPanel>
-    </StackPanel>
+        <!-- Bouton Add pour ajouter l'utilisateur sélectionné dans la ComboBox -->
+        <Button Grid.Row="2" Content="Add" Command="{Binding AddCommand}"/>
 
+        <!-- Bouton AddMyself pour ajouter CurrentUser s'il n'est pas encore participant -->
+        <Button Grid.Row="3" Content="Add Myself" Command="{Binding AddMyselfCommand}"/>
+
+        <!-- Bouton Add Everybody pour ajouter tous les utilisateurs de la ComboBox -->
+        <Button Grid.Row="4" Content="Add Everybody" Command="{Binding AddEverybodyCommand}"/>
+    </Grid>
 </f:UserControlBase>

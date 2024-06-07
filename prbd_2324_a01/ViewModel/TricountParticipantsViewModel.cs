@@ -16,7 +16,7 @@ namespace prbd_2324_a01.ViewModel
             LoadAvailableUsers();
             DeleteCommand = new RelayCommand<User>(DeleteParticipant, CanDeleteParticipant);
             AddCommand = new RelayCommand(AddParticipant, CanAddParticipant);
-            AddMyselfCommand = new RelayCommand(AddMyself);
+            AddMyselfCommand = new RelayCommand(AddMyself, CanAddMyself);
             AddEverybodyCommand = new RelayCommand(AddEverybody);
         }
 
@@ -52,11 +52,14 @@ namespace prbd_2324_a01.ViewModel
         private void LoadParticipants() {
             Participants = new ObservableCollection<User>(_tricount.Subscriptions.Select(s => s.User));
             OwnerId = _tricount.Creator;
+            Participants.Add(CurrentUser);
         }
 
         private void LoadAvailableUsers() {
-            AvailableUsers = new ObservableCollection<User>(Context.Users.Where(u => !_tricount.Subscriptions.Any(s => s.UserId == u.Id)).ToList());
+            var userIds = _tricount.Subscriptions.Select(s => s.UserId).ToList();
+            AvailableUsers = new ObservableCollection<User>(Context.Users.Where(u => !userIds.Contains(u.Id)).ToList());
         }
+
 
         private void DeleteParticipant(User participant) {
             if (participant.Id == OwnerId) {
@@ -98,6 +101,10 @@ namespace prbd_2324_a01.ViewModel
                 Participants.Add(currentUser);
                 AvailableUsers.Remove(currentUser);
             }
+        }
+
+        private bool CanAddMyself() {
+            return !Participants.Contains(CurrentUser);
         }
 
         private void AddEverybody() {

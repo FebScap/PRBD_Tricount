@@ -51,15 +51,15 @@ public class DisplayTricountViewModel : ViewModelBase<User, PridContext>
         });
 
         AddOperationCommand = new RelayCommand<Tricount>(tricount => {
-            NotifyColleagues(App.Messages.MSG_ADD_OPERATION, tricount);
+            NotifyColleagues(App.Messages.MSG_ADD_OPERATION, Tricount);
         });
 
         EditCommand = new RelayCommand<Tricount>(tricount => {
-            NotifyColleagues(App.Messages.MSG_EDIT_TRICOUNT, tricount);
+            NotifyColleagues(App.Messages.MSG_EDIT_TRICOUNT, Tricount);
         });
 
         DeleteCommand = new RelayCommand<Tricount>(tricount => {
-            NotifyColleagues(App.Messages.MSG_DELETE_TRICOUNT, tricount);
+            NotifyColleagues(App.Messages.MSG_DELETE_TRICOUNT, Tricount);
         });
     }
 

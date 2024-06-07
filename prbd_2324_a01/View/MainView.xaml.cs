@@ -1,5 +1,6 @@
 ﻿using Azure;
 using prbd_2324_a01.Model;
+using prbd_2324_a01.ViewModel;
 using PRBD_Framework;
 using System.Windows.Controls;
 
@@ -45,14 +46,13 @@ public partial class MainView : WindowBase
     private void DoDisplayTricount(Tricount tricount) {
         if (tricount != null)
             OpenTab(tricount.Title, () => new DisplayTricountView(tricount));
-
     }
 
     private void DoAddOperation(Tricount tricount) {
-        new ViewOperationView(tricount).ShowDialog();
+        App.ShowDialog<ViewOperationViewModel, User, PridContext>(tricount);
     }
     private void DoEditOperation(Model.Operation operation) {
-        new ViewOperationView(operation).ShowDialog();
+        App.ShowDialog<ViewOperationViewModel, User, PridContext>(operation);
     }
 
     private void OpenTab(string header, Func<UserControlBase> createView) {

@@ -1,27 +1,31 @@
-﻿using prbd_2324_a01.Model;
+﻿using Azure;
+using prbd_2324_a01.Model;
 using PRBD_Framework;
 using System.Collections.ObjectModel;
-using System.Windows;
 using System.Windows.Input;
 
 namespace prbd_2324_a01.ViewModel;
 
 public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
 {
-    private ObservableCollection<User> _users;
-    public ObservableCollection<User> Users {
+
+    private ObservableCollection<UserWeightSelectorViewModel> _users;
+
+    public ObservableCollection<UserWeightSelectorViewModel> Users {
         get => _users;
         set => SetProperty(ref _users, value);
     }
 
-    private readonly Tricount _tricount;
+    private Tricount _tricount;
     public Tricount Tricount {
         get => _tricount;
+        set => SetProperty(ref _tricount, value);
     }
 
-    private readonly Operation _operation = null;
-    public Operation Operation {
+    private Model.Operation _operation = null;
+    public Model.Operation Operation {
         get => _operation;
+        set => SetProperty(ref _operation, value);
     }
 
     public ICommand DeleteCommand { get; set; }
@@ -33,15 +37,14 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
     public string AddSaveButtonContent => Operation == null ? "Add" : "Save";
 
     public ViewOperationViewModel(Tricount tricount) {
-        _tricount = tricount;
+        Tricount = tricount;
         OnRefreshData();
         RegisterCommands();
-
     }
 
-    public ViewOperationViewModel(Operation operation) {
+    public ViewOperationViewModel(Model.Operation operation) {
         _operation = operation;
-        _tricount = Tricount.GetTricountById(operation.Tricount);
+        Tricount = Context.Tricounts.Find(operation.Tricount);
         OnRefreshData();
         RegisterCommands();
 
@@ -62,7 +65,9 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
     }
 
     protected override void OnRefreshData() {
-       Users = new ObservableCollection<User>(Tricount.GetAllUsers());        
+        List<User> users = Tricount.GetAllUsers();
+
+        Users = new ObservableCollection<UserWeightSelectorViewModel>(users.Select(u => new UserWeightSelectorViewModel(u, Tricount)));
     }
 }
 

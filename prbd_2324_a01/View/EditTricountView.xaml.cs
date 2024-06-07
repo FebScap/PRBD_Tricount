@@ -15,5 +15,4 @@ public partial class EditTricountView : UserControlBase
         InitializeComponent();
         DataContext = new EditTricountViewModel();
     }
-
 }

@@ -40,6 +40,8 @@ public partial class MainView : WindowBase
     }
 
     private void DoEditTricount(Tricount tricount) {
+        Console.WriteLine(tricount.Title);
+        DoCloseTab(tricount);
         OpenTab(tricount.Title, () => new EditTricountView(tricount));
     }
     private void DoAddTricount() {

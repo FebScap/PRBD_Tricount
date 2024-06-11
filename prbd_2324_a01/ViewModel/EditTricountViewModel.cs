@@ -81,7 +81,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
 
     private void SaveTricountAction() {
         if (Validate()) {
-            var tricount = new Tricount(TitleTextBox, DescriptionTextBox, App.CurrentUser.Id);
+            var tricount = new Tricount(TitleTextBox, DescriptionTextBox, App.CurrentUser.Id, CreationDateTextBox);
             tricount.Add();
             foreach (var p in TricountParticipants.Participants) {
                 Context.Subscriptions.Add(new Subscription(p.Id, tricount.Id));

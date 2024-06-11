@@ -11,8 +11,7 @@ namespace prbd_2324_a01.Model
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public bool IsNew { get; set; } = false;
+        public DateTime CreatedAt { get; set; }
 
         [Required, ForeignKey(nameof(User))]
         public int Creator { get; set; }
@@ -22,10 +21,11 @@ namespace prbd_2324_a01.Model
         public virtual ICollection<Operation> Operations { get; set; } = new HashSet<Operation>();
         public virtual ICollection<Subscription> Subscriptions { get; set; } = new HashSet<Subscription>();
 
-        public Tricount(string title, string description, int creator) {
+        public Tricount(string title, string description, int creator, DateTime createdAt) {
             Title = title;
             Description = description;
             Creator = creator;
+            CreatedAt = createdAt;
         }
 
         public Tricount() {

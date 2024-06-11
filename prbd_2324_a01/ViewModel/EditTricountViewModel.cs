@@ -53,7 +53,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
 
     public EditTricountViewModel(Tricount tricount, bool isNew) : base() {
         
-        _tricount = tricount;
+        Tricount = tricount;
         IsNew = isNew;
 
         if(isNew) {
@@ -81,21 +81,28 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
 
     private void SaveTricountAction() {
         if (Validate()) {
-            var tricount = new Tricount(TitleTextBox, DescriptionTextBox, App.CurrentUser.Id, CreationDateTextBox);
-            tricount.Add();
-            foreach (var p in TricountParticipants.Participants) {
-                Context.Subscriptions.Add(new Subscription(p.Id, tricount.Id));
-                Context.SaveChanges();
+            if (IsNew) {
+                var tricount = new Tricount(TitleTextBox, DescriptionTextBox, App.CurrentUser.Id, CreationDateTextBox);
+                tricount.Add();
+                foreach (var p in TricountParticipants.Participants) {
+                    Context.Subscriptions.Add(new Subscription(p.Id, tricount.Id));
+                    Context.SaveChanges();
+                }
+            } else {
+                Tricount.Title = TitleTextBox;
+                Tricount.Description = DescriptionTextBox;
+                Tricount.CreatedAt = CreationDateTextBox;
+                Tricount.Update();
             }
             RaisePropertyChanged();
-            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, tricount);
+            NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
             NotifyColleagues(App.Messages.MSG_CLOSE_TAB, new Tricount());
-            NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, tricount);
+            NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, Tricount);
         }
     }
 
     private void CancelButtonAction() {
-        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, new Tricount());
+        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, IsNew? new Tricount() : Tricount);
     }
 
     private bool CanSave() {
@@ -110,7 +117,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
             AddError(nameof(TitleTextBox), "required");
         else if (TitleTextBox.Length < 3)
             AddError(nameof(TitleTextBox), "length minimum is 3");
-        else if (!CurrentUser.IsTitleUnique(TitleTextBox))
+        else if (!CurrentUser.IsTitleUnique(TitleTextBox) && TitleTextBox != Tricount.Title)
             AddError(nameof(TitleTextBox), "Must be unique per user");
 
         return !HasErrors;

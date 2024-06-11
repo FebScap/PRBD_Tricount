@@ -19,11 +19,17 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         set => SetProperty(ref _titleTextBox, value, () => Validate());
     }
 
-    private string _descriptionTextBox = "";
+    private string _descriptionTextBox;
 
     public string DescriptionTextBox {
         get => _descriptionTextBox;
         set => SetProperty(ref _descriptionTextBox, value, () => Validate());
+    }
+
+    private DateTime _cretationDateTextBox;
+    public DateTime CreationDateTextBox {
+        get => _cretationDateTextBox;
+        set => SetProperty(ref _cretationDateTextBox, value, () => Validate());
     }
 
     private Tricount _tricount;
@@ -33,38 +39,44 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         set => SetProperty(ref _tricount, value);
     }
 
+    private bool _isNew;
+    public bool IsNew {
+        get => _isNew;
+        set => SetProperty(ref _isNew, value);
+    }
+
     public string Title { get; set; }
     public string Description { get; set; }
     public string Creator { get; set; }
     public DateTime CreationDate { get; set; }
     public TricountParticipantsViewModel TricountParticipants { get; set; }
 
-    public EditTricountViewModel(Tricount tricount) : base() {
-        OnRefreshData();
+    public EditTricountViewModel(Tricount tricount, bool isNew) : base() {
+        
         _tricount = tricount;
-        Title = tricount.Title;
-        Description = tricount.Description; 
-        Creator = User.GetUserById(tricount.Creator).FullName;
-        TitleTextBox = tricount.Title;
-        DescriptionTextBox = tricount.Description;
-        CreationDate = tricount.CreatedAt;
+        IsNew = isNew;
+
+        if(isNew) {
+            Title = "<New Tricount>";
+            Description = "No Description";
+            Creator = CurrentUser.FullName;
+            CreationDate = DateTime.Now;
+            CreationDateTextBox = DateTime.Now;
+        } else {
+            Title = tricount.Title;
+            Description = tricount.Description;
+            Creator = User.GetUserById(tricount.Creator).FullName;
+            CreationDate = tricount.CreatedAt;
+            TitleTextBox = tricount.Title;
+            DescriptionTextBox = tricount.Description;
+            CreationDateTextBox = tricount.CreatedAt;
+        }
 
         TricountParticipants = new TricountParticipantsViewModel(tricount);
         SaveCommand = new RelayCommand(SaveTricountAction, CanSave);
         CancelCommand = new RelayCommand(CancelButtonAction);
-    }
 
-    public EditTricountViewModel() : base() {
-        OnRefreshData();
-        Tricount tricount = new Tricount();
-        Title = "<New Tricount>";
-        Description = "No Description";
-        Creator = CurrentUser.FullName;
-        CreationDate = DateTime.Now;
-
-        TricountParticipants = new TricountParticipantsViewModel(tricount);
-        SaveCommand = new RelayCommand(SaveTricountAction, CanSave);
-        CancelCommand = new RelayCommand(CancelButtonAction);
+        RaisePropertyChanged();
     }
 
     private void SaveTricountAction() {
@@ -108,16 +120,24 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
         ClearErrors();
 
         if (!string.IsNullOrEmpty(DescriptionTextBox) && DescriptionTextBox.Length < 3)
-            AddError(nameof (DescriptionTextBox), "Must be empty or at least 3 char");
+            AddError(nameof(DescriptionTextBox), "Must be empty or at least 3 char");
+        
         return !HasErrors;
+    }
 
+    public bool ValidateDate() {
+        ClearErrors();
+
+        if (CreationDateTextBox > DateTime.Now)
+            AddError(nameof(CreationDateTextBox), "Cannot be in the future");
+
+        return !HasErrors;
     }
 
     public override bool Validate() {
-       return ValidateTitle() && ValidateDescription();
+       return ValidateTitle() && ValidateDescription() && ValidateDate();
     }
 
     protected override void OnRefreshData() {
-        
     }
 }

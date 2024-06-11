@@ -23,7 +23,7 @@ public partial class MainView : WindowBase
             tricount => DoDisplayTricount(tricount));
 
         Register<Tricount>(App.Messages.MSG_TITLE_CHANGED,
-            tricount => DoRenameTab(string.IsNullOrEmpty(tricount.Title) ? "<New Member>" : tricount.Title));
+            tricount => DoRenameTab(string.IsNullOrEmpty(tricount.Title) ? "<New Tricount>" : tricount.Title));
 
         Register<Tricount>(App.Messages.MSG_CLOSE_TAB,
            tricount => DoCloseTab(tricount));

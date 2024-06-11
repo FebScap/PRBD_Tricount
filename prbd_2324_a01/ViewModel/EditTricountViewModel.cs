@@ -96,6 +96,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
             }
             RaisePropertyChanged();
             NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
+            NotifyColleagues(App.Messages.MSG_TITLE_CHANGED, Tricount);
             NotifyColleagues(App.Messages.MSG_CLOSE_TAB, IsNew? new Tricount() : Tricount);
             NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, Tricount);
         }

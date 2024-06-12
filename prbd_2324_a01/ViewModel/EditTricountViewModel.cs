@@ -82,11 +82,12 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
     private void SaveTricountAction() {
         if (Validate()) {
             if (IsNew) {
-                var tricount = new Tricount(TitleTextBox, DescriptionTextBox, App.CurrentUser.Id, CreationDateTextBox);
-                tricount.Add();
+                Tricount = new Tricount(TitleTextBox, DescriptionTextBox, App.CurrentUser.Id, CreationDateTextBox);
+                Tricount.Add();
                 foreach (var p in TricountParticipants.Participants) {
-                    Context.Subscriptions.Add(new Subscription(p.Id, tricount.Id));
+                    Context.Subscriptions.Add(new Subscription(p.Id, Tricount.Id));
                     Context.SaveChanges();
+                    IsNew = false;
                 }
             } else {
                 Tricount.Title = TitleTextBox;
@@ -97,7 +98,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
             RaisePropertyChanged();
             NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
             NotifyColleagues(App.Messages.MSG_TITLE_CHANGED, Tricount);
-            NotifyColleagues(App.Messages.MSG_CLOSE_TAB, IsNew? new Tricount() : Tricount);
+            NotifyColleagues(App.Messages.MSG_CLOSE_TAB, Tricount);
             NotifyColleagues(App.Messages.MSG_DISPLAY_TRICOUNT, Tricount);
         }
     }

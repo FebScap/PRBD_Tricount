@@ -204,19 +204,28 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
 
     public void SaveOperation() {
         DialogResult = Operation;
+        Dictionary<int, int> balance = new Dictionary<int, int>();
         if (Operation != null) {
             Operation.Title = TitleTextBox;
+            Operation.Initiator = ThisUser.Id;
             Operation.Amount = Double.Parse(AmountTextBox);
             Operation.OperationDate = CreationDate;
             Operation.Update();
+            
 
         } else {
             Operation = new Operation();
+            Operation.Tricount = Tricount.Id;
+            Operation.Initiator = ThisUser.Id;
             Operation.Title = TitleTextBox;
             Operation.Amount = Double.Parse(AmountTextBox);
             Operation.OperationDate = CreationDate;
             Operation.Add();
         }
+        foreach (var u in Users) {
+            balance.Add(u.user.Id, u.Weight);
+        }
+        Operation.UpdateBalance(balance);
         NotifyColleagues(App.Messages.MSG_OPERATION_CHANGED);
         NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
     }

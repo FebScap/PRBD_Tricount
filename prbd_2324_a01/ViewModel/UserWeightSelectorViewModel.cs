@@ -8,7 +8,7 @@ namespace prbd_2324_a01.ViewModel;
 
 public class UserWeightSelectorViewModel : ViewModelBase<User, PridContext> {
     public event Action<int> NotifyBalance;
-    private User user;
+    public User user;
     private Tricount tricount;
     public int totalWeight { get; set; }
     public Operation Operation { get; set; }

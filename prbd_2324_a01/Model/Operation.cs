@@ -61,6 +61,23 @@ public class Operation : EntityBase<PridContext>
         Context.SaveChanges();
     }
 
+    public void UpdateBalance(Dictionary<int, int> balance) {
+        foreach (var rep in balance) {
+            if (Context.Repartitions.Find(this.Id, rep.Key) != null) {
+                Repartition r = Context.Repartitions.Find(this.Id, rep.Key);
+                if (rep.Value == 0) {
+                    Context.Repartitions.Remove(r);
+                } else {
+                    r.Weight = rep.Value;
+                    Context.Repartitions.Update(r);
+                }
+            } else {
+                if (rep.Value != 0) Context.Repartitions.Add(new Repartition(this.Id, rep.Key, rep.Value)); 
+            }
+        }
+        Context.SaveChanges();
+    }
+
     public Tricount GetTricount() {
         return Context.Tricounts.Find(this.Tricount);
     }

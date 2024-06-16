@@ -24,7 +24,7 @@ public partial class App : ApplicationBase<User, PridContext> {
         MSG_ADD_OPERATION,
         MSG_DELETE_TRICOUNT,
         MSG_DELETE_OPERATION,
-        MSG_SAVE_OPERATION,
+        MSG_OPERATION_CHANGED,
         MSG_OPERATION_AMOUNT_CHANGED
     }
 

@@ -2,6 +2,7 @@
 using prbd_2324_a01.Model;
 using PRBD_Framework;
 using System.Collections.ObjectModel;
+using System.Security;
 using System.Windows.Input;
 
 namespace prbd_2324_a01.ViewModel;
@@ -11,7 +12,7 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
     private ObservableCollection<UserWeightSelectorViewModel> _users;
     public ObservableCollection<UserWeightSelectorViewModel> Users {
         get => _users;
-        set => SetProperty(ref _users, value);
+        set => SetProperty(ref _users, value, () => Validate());
     }
 
     private List<User> _participants;
@@ -25,6 +26,8 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
         get => _totalWeight;
         set => SetProperty(ref _totalWeight, value);
     }
+
+    public string ErrorBalance { get; set; }
 
     private string _titleTextBox;
     public string TitleTextBox {
@@ -56,6 +59,12 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
         set => SetProperty(ref _thisUser, value, () => Validate());
     }
 
+    private DateTime _creationDate;
+    public DateTime CreationDate {
+        get => _creationDate;
+        set => SetProperty(ref _creationDate, value, () => Validate());
+    }
+
     public ICommand DeleteCommand { get; set; }
     public ICommand AddSaveCommand { get; set; }
     public ICommand CancelCommand { get; set; }
@@ -63,20 +72,21 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
     public string WindowTitle => Operation == null ? "Add Operation" : "Edit Operation";
     public string EditVisibility => Operation != null ? "Visible" : "Collapsed";
     public string AddSaveButtonContent => Operation == null ? "Add" : "Save";
-    public DateTime CreationDate { get; set; }
 
     public ViewOperationViewModel(Tricount tricount) {
         Tricount = tricount;
-        AmountTextBox = "0";
         Participants = Tricount.GetAllUsers();
-        TotalWeight = Participants.Count;
-
         Users = new ObservableCollection<UserWeightSelectorViewModel>(Participants.Select(u => new UserWeightSelectorViewModel(u, Tricount)));
+        AmountTextBox = "0";        
+        TotalWeight = Participants.Count;
+        CreationDate = DateTime.Now;
+
         foreach (var u in Users) {
             u.doChangeTotal(TotalWeight);
             //Listener des enfants pour voir si leurs balances ont changées
             u.NotifyBalance += w => {
                 TotalWeight += w;
+                Validate();
                 OnRefreshData();
             };
         }
@@ -87,13 +97,13 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
     public ViewOperationViewModel(Model.Operation operation) {
         Operation = operation;
         Tricount = Context.Tricounts.Find(operation.Tricount);
+        Participants = Tricount.GetAllUsers();
+        Users = new ObservableCollection<UserWeightSelectorViewModel>(Participants.Select(u => new UserWeightSelectorViewModel(u, Tricount)));
         TitleTextBox = Operation.Title;
         CreationDate = Operation.OperationDate;
         ThisUser = CurrentUser;
-        Participants = Tricount.GetAllUsers();
         TotalWeight = 0;
-
-        Users = new ObservableCollection<UserWeightSelectorViewModel>(Participants.Select(u => new UserWeightSelectorViewModel(u, Tricount)));
+       
         foreach (var u in Users) {
             u.doChangeTotal(TotalWeight);
             //Listener des enfants pour voir si leurs balances ont changées
@@ -114,22 +124,51 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
             DialogResult = Operation;
             NotifyColleagues(App.Messages.MSG_DELETE_OPERATION, Operation);
         });
-        AddSaveCommand = new RelayCommand(() => SaveOperation(), Validate);
+        AddSaveCommand = new RelayCommand(() => SaveOperation(), CanSave);
         CancelCommand = new RelayCommand(() => {
             DialogResult = null;
         });
     }
+    
+    private bool CanSave() {
+        return !string.IsNullOrEmpty(TitleTextBox) &&
+               !HasErrors;
+    }
 
-    private bool AmountChanged() {
+    public override bool Validate() {
+        ClearErrors();
+        bool isValid = true;
+        if (!ValidateDate()) isValid = false;
+        if (!ValidateTitle()) isValid = false;
+        if (!ValidateUser()) isValid = false;
+        if (!ValidateAmount()) isValid = false;
+        if (!ValidateBalance()) isValid = false;
+        return isValid;
+    }
+
+    public bool ValidateAmount() {
         try {
             Double a = Double.Parse(AmountTextBox);
-            foreach (var u in Users) {
-                u.doChangeAmount(a);
+            if (a < 0.01) {
+                AddError(nameof(AmountTextBox), "Must be 0,01€ at least");
+            } else {
+                // Verif pour le premier affichage d'une nouvelle operation
+                if (Users != null) {
+                    // Mise à jour du total dans les vm pour les calculs de balance
+                    foreach (var u in Users) {
+                        u.doChangeAmount(a);
+                    }
+                }
             }
-            if (a < 0) AddError(nameof(AmountTextBox), "Must be positive");
         } catch (FormatException) {
-             AddError(nameof(AmountTextBox), "Must be a number");
+            AddError(nameof(AmountTextBox), "Must be a number");
         }
+        return !HasErrors;
+    }
+
+    public bool ValidateUser() {
+        if (ThisUser == null)
+            AddError(nameof(ThisUser), "Cannot be empty");
         return !HasErrors;
     }
 
@@ -142,9 +181,29 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
         return !HasErrors;
     }
 
+    public bool ValidateDate() {
+        if (CreationDate > DateTime.Now)
+            AddError(nameof(CreationDate), "Cannot be in the future");
+        else if (CreationDate < Tricount.CreatedAt)
+            AddError(nameof(CreationDate), "Must be after tricount creation date");
+
+        return !HasErrors;
+    }
+
+    public bool ValidateBalance() {
+        bool oneChecked = false;
+        foreach (var user in Users) {
+            if (user.IsChecked) oneChecked = true;
+        }
+
+        if (!oneChecked)
+            AddError(nameof(ErrorBalance), "You must check at least one participant!");
+
+        return !HasErrors;
+    }
+
     public void SaveOperation() {
         DialogResult = Operation;
-        NotifyColleagues(App.Messages.MSG_SAVE_OPERATION, new Tricount());
         if (Operation != null) {
             Operation.Title = TitleTextBox;
             Operation.Amount = Double.Parse(AmountTextBox);
@@ -158,16 +217,14 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
             Operation.OperationDate = CreationDate;
             Operation.Add();
         }
-    }
-
-    public override bool Validate() {
-        ClearErrors();
-        return AmountChanged() && ValidateTitle() && ThisUser != null;
+        NotifyColleagues(App.Messages.MSG_OPERATION_CHANGED);
+        NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
     }
 
     protected override void OnRefreshData() {
         foreach (var u in Users) {
             u.doChangeTotal(TotalWeight);
+            Validate();
         }
     }
 

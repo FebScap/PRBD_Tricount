@@ -62,7 +62,7 @@ public class DisplayTricountViewModel : ViewModelBase<User, PridContext>
             NotifyColleagues(App.Messages.MSG_DELETE_TRICOUNT, Tricount);
         });
 
-        Register(App.Messages.MSG_SAVE_OPERATION,
+        Register(App.Messages.MSG_OPERATION_CHANGED,
           () => OnRefreshData());
 
         Register<Tricount>(App.Messages.MSG_TRICOUNT_CHANGED, tricount => OnRefreshData());

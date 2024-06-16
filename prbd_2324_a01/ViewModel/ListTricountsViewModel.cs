@@ -40,7 +40,7 @@ public class ListTricountsViewModel : ViewModelBase<User, PridContext>
 
         Register<Tricount>(App.Messages.MSG_TRICOUNT_CHANGED, tricount => OnRefreshData());
 
-        Register(App.Messages.MSG_SAVE_OPERATION,
+        Register(App.Messages.MSG_OPERATION_CHANGED,
          () => OnRefreshData());
     }
 

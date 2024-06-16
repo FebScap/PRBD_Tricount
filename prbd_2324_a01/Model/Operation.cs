@@ -60,4 +60,13 @@ public class Operation : EntityBase<PridContext>
         Context.Operations.Update(this);
         Context.SaveChanges();
     }
+
+    public Tricount GetTricount() {
+        return Context.Tricounts.Find(this.Tricount);
+    }
+
+    internal void Delete() {
+        Context.Operations.Remove(this);
+        Context.SaveChanges();
+    }
 }

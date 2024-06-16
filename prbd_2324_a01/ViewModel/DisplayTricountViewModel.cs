@@ -64,6 +64,8 @@ public class DisplayTricountViewModel : ViewModelBase<User, PridContext>
 
         Register(App.Messages.MSG_SAVE_OPERATION,
           () => OnRefreshData());
+
+        Register<Tricount>(App.Messages.MSG_TRICOUNT_CHANGED, tricount => OnRefreshData());
     }
 
     protected override void OnRefreshData() {

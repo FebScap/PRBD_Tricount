@@ -1,5 +1,4 @@
-﻿using Azure;
-using prbd_2324_a01.Model;
+﻿using prbd_2324_a01.Model;
 using prbd_2324_a01.ViewModel;
 using PRBD_Framework;
 using System.Windows.Controls;
@@ -33,6 +32,9 @@ public partial class MainView : WindowBase
 
         Register<Model.Operation>(App.Messages.MSG_EDIT_OPERATION,
          operation => DoEditOperation(operation));
+
+        Register<Model.Operation>(App.Messages.MSG_DELETE_OPERATION,
+            operation => DoDeleteOperation(operation));
     }
 
     private void DoCloseTab(Tricount tricount) {
@@ -53,6 +55,10 @@ public partial class MainView : WindowBase
             t.Delete();
             NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, t);
         }
+    }
+    private void DoDeleteOperation(Operation operation) {
+        operation.Delete();
+        NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, operation.GetTricount());
     }
 
     private void DoDisplayTricount(Tricount tricount) {

@@ -112,25 +112,9 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
     private void RegisterCommands() {
         DeleteCommand = new RelayCommand(() => {
             DialogResult = Operation;
-            NotifyColleagues(App.Messages.MSG_DELETE_OPERATION, new Tricount());
+            NotifyColleagues(App.Messages.MSG_DELETE_OPERATION, Operation);
         });
-        AddSaveCommand = new RelayCommand(() => {
-            DialogResult = Operation;
-            NotifyColleagues(App.Messages.MSG_SAVE_OPERATION, new Tricount());
-            if (Operation != null) {
-                Operation.Title = TitleTextBox;
-                Operation.Amount = Double.Parse(AmountTextBox);
-                Operation.OperationDate = CreationDate;
-                Operation.Update();
-                
-            } else {
-                Operation = new Operation();
-                Operation.Title = TitleTextBox;
-                Operation.Amount = Double.Parse(AmountTextBox);
-                Operation.OperationDate = CreationDate;
-                Operation.Add();
-            }
-        }, Validate);
+        AddSaveCommand = new RelayCommand(() => SaveOperation(), Validate);
         CancelCommand = new RelayCommand(() => {
             DialogResult = null;
         });
@@ -156,6 +140,24 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
             AddError(nameof(TitleTextBox), "length minimum is 3");
 
         return !HasErrors;
+    }
+
+    public void SaveOperation() {
+        DialogResult = Operation;
+        NotifyColleagues(App.Messages.MSG_SAVE_OPERATION, new Tricount());
+        if (Operation != null) {
+            Operation.Title = TitleTextBox;
+            Operation.Amount = Double.Parse(AmountTextBox);
+            Operation.OperationDate = CreationDate;
+            Operation.Update();
+
+        } else {
+            Operation = new Operation();
+            Operation.Title = TitleTextBox;
+            Operation.Amount = Double.Parse(AmountTextBox);
+            Operation.OperationDate = CreationDate;
+            Operation.Add();
+        }
     }
 
     public override bool Validate() {

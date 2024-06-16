@@ -9,20 +9,18 @@ namespace prbd_2324_a01.ViewModel;
 public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
 {
     private ObservableCollection<UserWeightSelectorViewModel> _users;
-
     public ObservableCollection<UserWeightSelectorViewModel> Users {
         get => _users;
         set => SetProperty(ref _users, value);
     }
 
     private List<User> _participants;
-
     public List<User> Participants {
         get => _participants;
         set => SetProperty(ref _participants, value);
     }
+    
     private int _totalWeight;
-
     public int TotalWeight {
         get => _totalWeight;
         set => SetProperty(ref _totalWeight, value);
@@ -46,10 +44,7 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
         set => SetProperty(ref _operation, value);
     }
 
-    public DateTime CreationDate { get; set; }
-
     private string _amountTextBox = "";
-
     public string AmountTextBox {
         get => _amountTextBox;
         set => SetProperty(ref _amountTextBox, value, () => Validate());
@@ -68,16 +63,26 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
     public string WindowTitle => Operation == null ? "Add Operation" : "Edit Operation";
     public string EditVisibility => Operation != null ? "Visible" : "Collapsed";
     public string AddSaveButtonContent => Operation == null ? "Add" : "Save";
+    public DateTime CreationDate { get; set; }
 
     public ViewOperationViewModel(Tricount tricount) {
         Tricount = tricount;
         AmountTextBox = "0";
+        Participants = Tricount.GetAllUsers();
+        TotalWeight = Participants.Count;
+
+        Users = new ObservableCollection<UserWeightSelectorViewModel>(Participants.Select(u => new UserWeightSelectorViewModel(u, Tricount)));
+        foreach (var u in Users) {
+            u.doChangeTotal(TotalWeight);
+            //Listener des enfants pour voir si leurs balances ont changées
+            u.NotifyBalance += w => {
+                TotalWeight += w;
+                Console.WriteLine("total changed");
+                OnRefreshData();
+            };
+        }
         OnRefreshData();
         RegisterCommands();
-        foreach (var item in Tricount.GetAllUsers()) {
-            DoChangeWeight(1);
-        }
-        Participants = Tricount.GetAllUsers();
     }
 
     public ViewOperationViewModel(Model.Operation operation) {
@@ -85,15 +90,24 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
         Tricount = Context.Tricounts.Find(operation.Tricount);
         TitleTextBox = Operation.Title;
         CreationDate = Operation.OperationDate;
-        AmountTextBox = Operation.Amount.ToString();
         ThisUser = CurrentUser;
+        Participants = Tricount.GetAllUsers();
+        TotalWeight = Participants.Count;
+
+        Users = new ObservableCollection<UserWeightSelectorViewModel>(Participants.Select(u => new UserWeightSelectorViewModel(u, Tricount)));
+        foreach (var u in Users) {
+            u.doChangeTotal(TotalWeight);
+            //Listener des enfants pour voir si leurs balances ont changées
+            u.NotifyBalance += w => {
+                TotalWeight += w;
+                Console.WriteLine("total changed");
+                OnRefreshData();
+            };
+        }
+
+        AmountTextBox = Operation.Amount.ToString();
         OnRefreshData();
         RegisterCommands();
-        foreach (var item in Tricount.GetAllUsers()) {
-            DoChangeWeight(1);
-        }
-        Participants = Tricount.GetAllUsers();
-
     }
 
     private void RegisterCommands() {
@@ -121,34 +135,19 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
         CancelCommand = new RelayCommand(() => {
             DialogResult = null;
         });
-
-        Register(App.Messages.MSG_WEIGHT_INCREASED,
-          () => DoChangeWeight(1));
-
-        Register(App.Messages.MSG_WEIGHT_DECREASED,
-          () => DoChangeWeight(-1));
-
-        Register<int>(App.Messages.MSG_WEIGHT_REMOVED,
-          (x) => DoChangeWeight(-x));
-    }
-
-    private void DoChangeWeight(int x) {
-        TotalWeight += x;
-
-        NotifyColleagues(App.Messages.MSG_TOTALWEIGHT_CHANGED, TotalWeight);
     }
 
     private bool AmountChanged() {
         try {
-            NotifyColleagues(App.Messages.MSG_OPERATION_AMOUNT_CHANGED, Double.Parse(AmountTextBox));
-            Console.WriteLine(AmountTextBox);
-            if (Double.Parse(AmountTextBox) < 0) AddError(nameof(AmountTextBox), "Must be positive");
+            Double a = Double.Parse(AmountTextBox);
+            foreach (var u in Users) {
+                u.doChangeAmount(a);
+            }
+            if (a < 0) AddError(nameof(AmountTextBox), "Must be positive");
         } catch (FormatException) {
-                AddError(nameof(AmountTextBox), "Must be a number");
+             AddError(nameof(AmountTextBox), "Must be a number");
         }
-
         return !HasErrors;
-
     }
 
     public bool ValidateTitle() {
@@ -166,10 +165,17 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
     }
 
     protected override void OnRefreshData() {
-        List<User> users = Tricount.GetAllUsers();
-
-        Users = new ObservableCollection<UserWeightSelectorViewModel>(users.Select(u => new UserWeightSelectorViewModel(u, Tricount)));
+        foreach (var u in Users) {
+            u.doChangeTotal(TotalWeight);
+        }
+        Console.WriteLine(TotalWeight);
     }
 
+    public override void Dispose() {
+        base.Dispose();
+        foreach (var user in Users) {
+            user.Dispose();
+        }
+    }
 }
 

@@ -7,9 +7,10 @@ using Operation = prbd_2324_a01.Model.Operation;
 namespace prbd_2324_a01.ViewModel;
 
 public class UserWeightSelectorViewModel : ViewModelBase<User, PridContext> {
+    public event Action<int> NotifyBalance;
     private User user;
     private Tricount tricount;
-    private int totalWeight;
+    public int totalWeight { get; set; }
     private Double operationAmount;
 
     private Double _amount;
@@ -44,44 +45,33 @@ public class UserWeightSelectorViewModel : ViewModelBase<User, PridContext> {
         CheckCommand = new RelayCommand(() => {
             if (IsChecked) {
                 Weight = 1;
-                OnRefreshData();
-                NotifyColleagues(App.Messages.MSG_WEIGHT_INCREASED);
+                NotifyBalance?.Invoke(1);
             } else {
                 int x = Weight;
                 Weight = 0;
-                OnRefreshData();
-                NotifyColleagues(App.Messages.MSG_WEIGHT_REMOVED, x);
+                NotifyBalance?.Invoke(-x);
             }
            
         });
 
         UpCommand = new RelayCommand(() => {
             Weight++;
-            OnRefreshData();
-            NotifyColleagues(App.Messages.MSG_WEIGHT_INCREASED);
+            NotifyBalance?.Invoke(1);
         });
         DownCommand = new RelayCommand(() => {
             if (Weight > 1) {
                 Weight--;
-                OnRefreshData();
-                NotifyColleagues(App.Messages.MSG_WEIGHT_DECREASED);
+                NotifyBalance?.Invoke(-1);
             }
         });
-
-        Register<int>(App.Messages.MSG_TOTALWEIGHT_CHANGED,
-         (x) => doChangeTotal(x));
-
-        Register<Double>(App.Messages.MSG_OPERATION_AMOUNT_CHANGED,
-         (x) => doChangeAmount(x));
-        Console.WriteLine(totalWeight);
     }
 
-    private void doChangeAmount(Double x) {
+    public void doChangeAmount(Double x) {
         operationAmount = x;
         OnRefreshData();
     }
 
-    private void doChangeTotal(int x) {
+    public void doChangeTotal(int x) {
         totalWeight = x;
         OnRefreshData();
     }

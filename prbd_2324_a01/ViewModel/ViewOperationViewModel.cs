@@ -77,7 +77,6 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
             //Listener des enfants pour voir si leurs balances ont changées
             u.NotifyBalance += w => {
                 TotalWeight += w;
-                Console.WriteLine("total changed");
                 OnRefreshData();
             };
         }
@@ -86,13 +85,13 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
     }
 
     public ViewOperationViewModel(Model.Operation operation) {
-        _operation = operation;
+        Operation = operation;
         Tricount = Context.Tricounts.Find(operation.Tricount);
         TitleTextBox = Operation.Title;
         CreationDate = Operation.OperationDate;
         ThisUser = CurrentUser;
         Participants = Tricount.GetAllUsers();
-        TotalWeight = Participants.Count;
+        TotalWeight = 0;
 
         Users = new ObservableCollection<UserWeightSelectorViewModel>(Participants.Select(u => new UserWeightSelectorViewModel(u, Tricount)));
         foreach (var u in Users) {
@@ -100,9 +99,9 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
             //Listener des enfants pour voir si leurs balances ont changées
             u.NotifyBalance += w => {
                 TotalWeight += w;
-                Console.WriteLine("total changed");
                 OnRefreshData();
             };
+            u.setOperation(Operation);
         }
 
         AmountTextBox = Operation.Amount.ToString();
@@ -168,7 +167,6 @@ public class ViewOperationViewModel : DialogViewModelBase<User, PridContext>
         foreach (var u in Users) {
             u.doChangeTotal(TotalWeight);
         }
-        Console.WriteLine(TotalWeight);
     }
 
     public override void Dispose() {

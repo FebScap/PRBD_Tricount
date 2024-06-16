@@ -11,6 +11,7 @@ public class UserWeightSelectorViewModel : ViewModelBase<User, PridContext> {
     private User user;
     private Tricount tricount;
     public int totalWeight { get; set; }
+    public Operation Operation { get; set; }
     private Double operationAmount;
 
     private Double _amount;
@@ -55,13 +56,25 @@ public class UserWeightSelectorViewModel : ViewModelBase<User, PridContext> {
         });
 
         UpCommand = new RelayCommand(() => {
-            Weight++;
-            NotifyBalance?.Invoke(1);
+            if (IsChecked) {
+                Weight++;
+                NotifyBalance?.Invoke(1);
+            } else {
+                Weight = 1;
+                NotifyBalance?.Invoke(1);
+                IsChecked = true;
+            }
         });
         DownCommand = new RelayCommand(() => {
-            if (Weight > 1) {
-                Weight--;
-                NotifyBalance?.Invoke(-1);
+            if (IsChecked) {
+                if (Weight > 1) {
+                    Weight--;
+                    NotifyBalance?.Invoke(-1);
+                } else if (Weight == 1) {
+                    Weight--;
+                    NotifyBalance?.Invoke(-1);
+                    IsChecked = false;
+                }
             }
         });
     }
@@ -74,6 +87,14 @@ public class UserWeightSelectorViewModel : ViewModelBase<User, PridContext> {
     public void doChangeTotal(int x) {
         totalWeight = x;
         OnRefreshData();
+    }
+    public void setOperation(Operation operation) {
+        Operation = operation;
+        Weight = Operation.getUserWeight(user.Id);
+        NotifyBalance?.Invoke(Weight);
+        if (Weight == 0) {
+            IsChecked = false;
+        }
     }
 
     private Double CalculateBalance() {

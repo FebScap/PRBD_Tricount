@@ -47,6 +47,10 @@ public class Operation : EntityBase<PridContext>
         return shares;
     }
 
+    public int getUserWeight(int userId) {
+        return Context.Repartitions.Where(r => r.UserId == userId && r.OperationId == this.Id).Select(r => r.Weight).FirstOrDefault();
+    }
+
     public void Add() {
         Context.Operations.Add(this);
         Context.SaveChanges();
@@ -56,6 +60,4 @@ public class Operation : EntityBase<PridContext>
         Context.Operations.Update(this);
         Context.SaveChanges();
     }
-
-
 }

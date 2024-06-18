@@ -14,15 +14,24 @@ namespace prbd_2324_a01.ViewModel
             set => _tricount = value;
         }
 
-        public TricountParticipantsViewModel(Tricount tricount) {
+        private bool _isNew;
+        public bool IsNew {
+            get => _isNew;
+            set => SetProperty(ref _isNew, value);
+        }
+
+        public TricountParticipantsViewModel(Tricount tricount, bool isNew) {
             Tricount = tricount;
+            IsNew = isNew;
             LoadParticipants();
             LoadAvailableUsers();
-            if (!Participants.Contains(CurrentUser)) {
+            if (IsNew) {
                 Participants.Add(CurrentUser);
                 AvailableUsers.Remove(CurrentUser);
                 OwnerId = CurrentUser.Id;
                 NotifyColleagues(App.Messages.MSG_PARTICIPANTS_CHANGED, Participants);
+            } else {
+                OwnerId = Tricount.Creator;
             }
             DeleteCommand = new RelayCommand<User>(DeleteParticipant, CanDeleteParticipant);
             AddCommand = new RelayCommand(AddParticipant, CanAddParticipant);
@@ -61,12 +70,13 @@ namespace prbd_2324_a01.ViewModel
 
         private void LoadParticipants() {
             Participants = new ObservableCollection<User>(Tricount.Participants);
-            //OwnerId = Tricount.Creator;
         }
 
         private void LoadAvailableUsers() {
-            var userIds = _tricount.Subscriptions.Select(s => s.UserId).ToList();
-            AvailableUsers = new ObservableCollection<User>(Context.Users.Where(u => !userIds.Contains(u.Id)).ToList());
+            var participantIds = Participants.Select(p => p.Id).ToList();
+            AvailableUsers = new ObservableCollection<User>(
+                Context.Users.Where(u => !participantIds.Contains(u.Id)).ToList()
+            );
         }
 
         private void DeleteParticipant(User participant) {

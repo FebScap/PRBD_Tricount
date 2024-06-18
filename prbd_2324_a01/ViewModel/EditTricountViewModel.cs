@@ -72,7 +72,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
             CreationDateTextBox = tricount.CreatedAt;
         }
 
-        TricountParticipants = new TricountParticipantsViewModel(tricount);
+        TricountParticipants = new TricountParticipantsViewModel(tricount, IsNew);
         SaveCommand = new RelayCommand(SaveTricountAction, CanSave);
         CancelCommand = new RelayCommand(CancelButtonAction);
 
@@ -139,8 +139,8 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
 
         if (CreationDateTextBox > DateTime.Now)
             AddError(nameof(CreationDateTextBox), "Cannot be in the future");
-        else if (!IsNew) {
-            if (CreationDateTextBox > Tricount.GetLastOperation().OperationDate) {
+        else if (!IsNew && Tricount.GetFirstOperation() != null) {
+            if (CreationDateTextBox > Tricount.GetFirstOperation().OperationDate) {
                 AddError(nameof(CreationDateTextBox), "Cannot be after the first operation");
             }
         }

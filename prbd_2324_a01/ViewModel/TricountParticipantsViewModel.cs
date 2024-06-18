@@ -1,4 +1,5 @@
-﻿using prbd_2324_a01.Model;
+﻿using Microsoft.IdentityModel.Tokens;
+using prbd_2324_a01.Model;
 using PRBD_Framework;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace prbd_2324_a01.ViewModel
             DeleteCommand = new RelayCommand<User>(DeleteParticipant, CanDeleteParticipant);
             AddCommand = new RelayCommand(AddParticipant, CanAddParticipant);
             AddMyselfCommand = new RelayCommand(AddMyself, CanAddMyself);
-            AddEverybodyCommand = new RelayCommand(AddEverybody);
+            AddEverybodyCommand = new RelayCommand(AddEverybody, CanAddEverybody);
         }
 
         private ObservableCollection<User> _participants;
@@ -122,6 +123,10 @@ namespace prbd_2324_a01.ViewModel
             AvailableUsers.Clear();
             NotifyColleagues(App.Messages.MSG_PARTICIPANTS_CHANGED, Participants);
 
+        }
+
+        private bool CanAddEverybody() {
+            return !AvailableUsers.IsNullOrEmpty();
         }
     }
 }

@@ -139,7 +139,11 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
 
         if (CreationDateTextBox > DateTime.Now)
             AddError(nameof(CreationDateTextBox), "Cannot be in the future");
-
+        else if (!IsNew) {
+            if (CreationDateTextBox > Tricount.GetLastOperation().OperationDate) {
+                AddError(nameof(CreationDateTextBox), "Cannot be after the first operation");
+            }
+        }
         return !HasErrors;
     }
 

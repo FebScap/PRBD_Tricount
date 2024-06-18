@@ -88,6 +88,10 @@ namespace prbd_2324_a01.Model
             return this.GetAllOperations().FirstOrDefault();
         }
 
+        public Operation GetFirstOperation() {
+            return this.GetAllOperations().LastOrDefault();
+        }
+
         public List<User> GetAllParticipantsExpectCurrent(User CurrentUser) {
             List<User> users = new List<User>();
             foreach (Subscription sub in Context.Subscriptions.Where(s => s.TricountId == this.Id)) {

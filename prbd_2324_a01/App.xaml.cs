@@ -14,6 +14,7 @@ public partial class App : ApplicationBase<User, PridContext> {
         MSG_EDIT_TRICOUNT,
         MSG_DISPLAY_TRICOUNT,
         MSG_CLOSE_TAB,
+        MSG_CLEAR_TAB,
         MSG_SIGNUP,
         MSG_DO_SIGNUP,
         MSG_TRICOUNT_CHANGED,
@@ -78,7 +79,8 @@ public partial class App : ApplicationBase<User, PridContext> {
     }
 
     protected override void OnRefreshData() {
-        // TODO
+        if (CurrentUser?.Id != null)
+            CurrentUser = User.GetUserById(CurrentUser.Id);
     }
 
     private static void TestQueries() {

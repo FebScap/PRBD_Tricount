@@ -25,6 +25,7 @@ public class MainViewModel : ViewModelBase<User, PridContext>
             Context.Database.EnsureDeleted();
             Context.Database.EnsureCreated();
             NotifyColleagues(ApplicationBaseMessages.MSG_REFRESH_DATA);
+            NotifyColleagues(App.Messages.MSG_LOGIN, CurrentUser);
             Console.Write(" done");
         });
     }

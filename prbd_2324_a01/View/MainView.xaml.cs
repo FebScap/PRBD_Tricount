@@ -27,6 +27,9 @@ public partial class MainView : WindowBase
         Register<Tricount>(App.Messages.MSG_CLOSE_TAB,
            tricount => DoCloseTab(tricount));
 
+        Register(App.Messages.MSG_CLEAR_TAB,
+           () => DoClearTab());
+
         Register<Tricount>(App.Messages.MSG_ADD_OPERATION,
         tricount => DoAddOperation(tricount));
 
@@ -39,6 +42,10 @@ public partial class MainView : WindowBase
 
     private void DoCloseTab(Tricount tricount) {
         tabControl.CloseByTag(string.IsNullOrEmpty(tricount.Title) ? "<New Tricount>" : tricount.Title);
+    }
+
+    private void DoClearTab() {
+        tabControl.Items.Clear();
     }
 
     private void DoEditTricount(Tricount tricount) {

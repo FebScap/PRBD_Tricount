@@ -119,6 +119,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
     }
 
     private void CancelButtonAction() {
+        ClearErrors();
         NotifyColleagues(App.Messages.MSG_CLOSE_TAB, IsNew ? new Tricount() : Tricount);
     }
 

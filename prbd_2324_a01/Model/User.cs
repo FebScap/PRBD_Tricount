@@ -49,8 +49,10 @@ public class User : EntityBase<PridContext>
 
         // Tri par ordre chronologique inverse
         var sortedTricounts = tricounts
-            .OrderByDescending(t => t.Operations.Any() ? t.Operations.Max(o => o.OperationDate) : t.CreatedAt)
-            .ToList();
+        .OrderByDescending(t => t.CreatedAt.Date)
+        .ThenBy(t => t.Operations.Any())
+        .ThenBy(t => t.Operations.Any() ? t.Operations.Max(o => o.OperationDate.Date) : DateTime.MinValue)
+        .ToList();
 
         return sortedTricounts;
     }
@@ -58,23 +60,27 @@ public class User : EntityBase<PridContext>
     public List<Tricount> GetAllTricountFiltered(string filter) {
         var tricounts = new List<Tricount>();
 
+        var titleList = Context.Operations.Where(o => o.Title.Contains(filter)).Select(s => s.Tricount);
         var filteredSubscriptions = Context.Subscriptions
             .Where(s => s.UserId == this.Id &&
                         (s.Tricount.Title.Contains(filter) ||
                          s.Tricount.Description.Contains(filter) ||
                          s.Tricount.Participants.Any(p => p.FullName.Contains(filter)) ||
-                         s.Tricount.Operations.Any(o => o.Title.Contains(filter)))) //filtre ne fonctionne pas sur le titre d'opération?
+                         titleList.Contains(s.Tricount.Id))) 
             .Select(s => s.Tricount);
 
         tricounts.AddRange(filteredSubscriptions);
 
         // Tri par ordre chronologique inverse
         var sortedTricounts = tricounts
-            .OrderByDescending(t => t.Operations.Any() ? t.Operations.Max(o => o.OperationDate) : t.CreatedAt)
+            .OrderByDescending(t => t.CreatedAt.Date)
+            .ThenByDescending(t => t.Operations.Any())
+            .ThenByDescending(t => t.Operations.Any() ? t.Operations.Max(o => o.OperationDate.Date) : DateTime.MinValue)
             .ToList();
 
         return sortedTricounts;
     }
+
 
     public static User GetUserById(int id) {
         using (var context = new PridContext()) {

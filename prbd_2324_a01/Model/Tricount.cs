@@ -32,7 +32,7 @@ namespace prbd_2324_a01.Model
         }
 
         public static IQueryable<Tricount> GetAll() {
-            return Context.Tricounts;
+            return Context.Tricounts.OrderByDescending(t => t.CreatedAt);
         }
 
         public static IQueryable<Tricount> GetAllFiltered(string filter) {
@@ -44,7 +44,7 @@ namespace prbd_2324_a01.Model
                                  t.Participants.Any(p => p.FullName.Contains(filter)) ||
                                  titleList.Contains(t.Id)
                            select t;
-            return filtered;
+            return filtered.OrderByDescending(t => t.CreatedAt);
         }
 
 
@@ -92,6 +92,10 @@ namespace prbd_2324_a01.Model
 
         public Operation GetLastOperation() {
             return this.GetAllOperations().FirstOrDefault();
+        }
+
+        public DateTime GetLastOperationDate() {
+            return this.GetAllOperations().FirstOrDefault().OperationDate;
         }
 
         public Operation GetFirstOperation() {

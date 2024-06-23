@@ -49,9 +49,8 @@ public class User : EntityBase<PridContext>
 
         // Tri par ordre chronologique inverse
         var sortedTricounts = tricounts
-        .OrderByDescending(t => t.CreatedAt.Date)
-        .ThenBy(t => t.Operations.Any())
-        .ThenBy(t => t.Operations.Any() ? t.Operations.Max(o => o.OperationDate.Date) : DateTime.MinValue)
+        .OrderByDescending(t => t.CreatedAt)
+        .ThenByDescending(t => t.GetLastOperation() != null ? t.GetLastOperationDate() : new DateTime())
         .ToList();
 
         return sortedTricounts;
@@ -73,10 +72,9 @@ public class User : EntityBase<PridContext>
 
         // Tri par ordre chronologique inverse
         var sortedTricounts = tricounts
-            .OrderByDescending(t => t.CreatedAt.Date)
-            .ThenByDescending(t => t.Operations.Any())
-            .ThenByDescending(t => t.Operations.Any() ? t.Operations.Max(o => o.OperationDate.Date) : DateTime.MinValue)
-            .ToList();
+         .OrderByDescending(t => t.CreatedAt)
+         .ThenByDescending(t => t.GetLastOperation() != null ? t.GetLastOperationDate() : new DateTime())
+         .ToList();
 
         return sortedTricounts;
     }

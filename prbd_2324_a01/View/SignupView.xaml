@@ -9,8 +9,8 @@
         mc:Ignorable="d"
         Title="Signup" WindowStartupLocation="CenterScreen"
         FocusManager.FocusedElement="{Binding ElementName=txtEmail}" ResizeMode="NoResize"
-        Width="250"
-        SizeToContent="WidthAndHeight" >
+        Width="400"
+        SizeToContent="Height" >
     <Window.DataContext>
         <vm:SignupViewModel x:Name="vm"/>
     </Window.DataContext>

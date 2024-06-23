@@ -11,7 +11,7 @@
              x:Name="uc"
                     Title="{Binding WindowTitle}"
              d:DataContext="{d:DesignInstance Type=vm:ViewOperationViewModel, IsDesignTimeCreatable=False}"
-                    Width="300" Height="420"
+                    Width="300" SizeToContent="Height"
                     WindowStartupLocation="CenterScreen">
 
     <StackPanel Margin="5,0">

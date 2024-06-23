@@ -2,6 +2,7 @@
 using prbd_2324_a01.Utils;
 using PRBD_Framework;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace prbd_2324_a01.ViewModel;
@@ -13,14 +14,12 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
     public ICommand CancelCommand { get; set; }
 
     private string _titleTextBox;
-
     public string TitleTextBox {
         get => _titleTextBox;
         set => SetProperty(ref _titleTextBox, value, () => Validate());
     }
 
     private string _descriptionTextBox;
-
     public string DescriptionTextBox {
         get => _descriptionTextBox;
         set => SetProperty(ref _descriptionTextBox, value, () => Validate());
@@ -33,7 +32,6 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
     }
 
     private Tricount _tricount;
-
     public Tricount Tricount {
         get => _tricount;
         set => SetProperty(ref _tricount, value);
@@ -52,11 +50,10 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
     public TricountParticipantsViewModel TricountParticipants { get; set; }
 
     public EditTricountViewModel(Tricount tricount, bool isNew) : base() {
-        
         Tricount = tricount;
         IsNew = isNew;
 
-        if(isNew) {
+        if (isNew) {
             Title = "<New Tricount>";
             Description = "No Description";
             Creator = CurrentUser.FullName;
@@ -86,15 +83,33 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
                 Tricount.Add();
                 foreach (var p in TricountParticipants.Participants) {
                     Context.Subscriptions.Add(new Subscription(p.Id, Tricount.Id));
-                    Context.SaveChanges();
-                    IsNew = false;
                 }
+                IsNew = false;
             } else {
                 Tricount.Title = TitleTextBox;
                 Tricount.Description = DescriptionTextBox;
                 Tricount.CreatedAt = CreationDateTextBox;
                 Tricount.Update();
+
+                var currentParticipants = Tricount.GetAllUsers();
+
+                foreach (var p in TricountParticipants.Participants) {
+                    if (!currentParticipants.Contains(p)) {
+                        Context.Subscriptions.Add(new Subscription(p.Id, Tricount.Id));
+                    }
+                }
+
+                foreach (var p in currentParticipants) {
+                    if (!TricountParticipants.Participants.Contains(p)) {
+                        var subscription = Context.Subscriptions
+                            .FirstOrDefault(s => s.UserId == p.Id && s.TricountId == Tricount.Id);
+                        if (subscription != null) {
+                            Context.Subscriptions.Remove(subscription);
+                        }
+                    }
+                }
             }
+            Context.SaveChanges();
             RaisePropertyChanged();
             NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, Tricount);
             NotifyColleagues(App.Messages.MSG_TITLE_CHANGED, Tricount);
@@ -104,12 +119,11 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
     }
 
     private void CancelButtonAction() {
-        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, IsNew? new Tricount() : Tricount);
+        NotifyColleagues(App.Messages.MSG_CLOSE_TAB, IsNew ? new Tricount() : Tricount);
     }
 
     private bool CanSave() {
-        return !string.IsNullOrEmpty(TitleTextBox) &&
-               !HasErrors;
+        return !string.IsNullOrEmpty(TitleTextBox) && !HasErrors;
     }
 
     public bool ValidateTitle() {
@@ -130,7 +144,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
 
         if (!string.IsNullOrEmpty(DescriptionTextBox) && DescriptionTextBox.Length < 3)
             AddError(nameof(DescriptionTextBox), "Must be empty or at least 3 char");
-        
+
         return !HasErrors;
     }
 
@@ -148,7 +162,7 @@ public class EditTricountViewModel : ViewModelBase<User, PridContext>
     }
 
     public override bool Validate() {
-       return ValidateTitle() && ValidateDescription() && ValidateDate();
+        return ValidateTitle() && ValidateDescription() && ValidateDate();
     }
 
     protected override void OnRefreshData() {

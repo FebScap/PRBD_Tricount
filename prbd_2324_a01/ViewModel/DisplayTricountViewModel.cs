@@ -61,6 +61,11 @@ public class DisplayTricountViewModel : ViewModelBase<User, PridContext>
         DeleteCommand = new RelayCommand<Tricount>(tricount => {
             NotifyColleagues(App.Messages.MSG_DELETE_TRICOUNT, Tricount);
         });
+
+        Register(App.Messages.MSG_OPERATION_CHANGED,
+          () => OnRefreshData());
+
+        Register<Tricount>(App.Messages.MSG_TRICOUNT_CHANGED, tricount => OnRefreshData());
     }
 
     protected override void OnRefreshData() {

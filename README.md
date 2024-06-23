@@ -4,9 +4,7 @@
 
 ### Liste des bugs connus
 
-  * bug 1
-  * bug 2
-  * ...
+  * Voir auto évaluation
 
 ### Liste des fonctionnalités supplémentaires
 

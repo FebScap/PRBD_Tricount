@@ -19,14 +19,14 @@
         </Grid.RowDefinitions>
 
         <!-- Liste des participants -->
-        <ListBox Grid.Row="0" ItemsSource="{Binding Participants}">
+        <ListBox Grid.Row="0" HorizontalAlignment="Stretch" ItemsSource="{Binding Participants}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding FullName}"/>
-                        <Button Content="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                    <DockPanel HorizontalAlignment="Stretch">
+                        <TextBlock Text="{Binding FullName}" HorizontalAlignment="Left" Width="145" />
+                        <Button Content="Delete" HorizontalAlignment="Right" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                 CommandParameter="{Binding}"/>
-                    </StackPanel>
+                    </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -37,10 +37,12 @@
         <!-- Bouton Add pour ajouter l'utilisateur sélectionné dans la ComboBox -->
         <Button Grid.Row="2" Content="Add" Command="{Binding AddCommand}"/>
 
-        <!-- Bouton AddMyself pour ajouter CurrentUser s'il n'est pas encore participant -->
-        <Button Grid.Row="3" Content="Add Myself" Command="{Binding AddMyselfCommand}"/>
-
-        <!-- Bouton Add Everybody pour ajouter tous les utilisateurs de la ComboBox -->
-        <Button Grid.Row="4" Content="Add Everybody" Command="{Binding AddEverybodyCommand}"/>
+        <DockPanel Grid.Row="3" HorizontalAlignment="Stretch" Margin="0,5">
+            <!-- Bouton AddMyself pour ajouter CurrentUser s'il n'est pas encore participant -->
+            <Button Content="Add Myself" HorizontalAlignment="Left" Command="{Binding AddMyselfCommand}"/>
+            <!-- Bouton Add Everybody pour ajouter tous les utilisateurs de la ComboBox -->
+            <Button Content="Add Everybody" HorizontalAlignment="Right" Command="{Binding AddEverybodyCommand}"/>
+        </DockPanel>
+        
     </Grid>
 </f:UserControlBase>

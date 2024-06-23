@@ -1,6 +1,8 @@
 ﻿using prbd_2324_a01.Model;
 using PRBD_Framework;
 using prbd_2324_a01.ViewModel;
+using System.Text.RegularExpressions;
+using System.Windows.Input;
 
 namespace prbd_2324_a01.View
 {
@@ -15,5 +17,6 @@ namespace prbd_2324_a01.View
             InitializeComponent();
             DataContext = new ViewOperationViewModel(tricount);
         }
+
     }
 }

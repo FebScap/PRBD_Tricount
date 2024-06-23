@@ -1,4 +1,5 @@
-﻿using prbd_2324_a01.Model;
+﻿using Microsoft.IdentityModel.Tokens;
+using prbd_2324_a01.Model;
 using PRBD_Framework;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,20 +15,29 @@ namespace prbd_2324_a01.ViewModel
             set => _tricount = value;
         }
 
-        public TricountParticipantsViewModel(Tricount tricount) {
+        private bool _isNew;
+        public bool IsNew {
+            get => _isNew;
+            set => SetProperty(ref _isNew, value);
+        }
+
+        public TricountParticipantsViewModel(Tricount tricount, bool isNew) {
             Tricount = tricount;
+            IsNew = isNew;
             LoadParticipants();
             LoadAvailableUsers();
-            if (!Participants.Contains(CurrentUser)) {
+            if (IsNew) {
                 Participants.Add(CurrentUser);
                 AvailableUsers.Remove(CurrentUser);
                 OwnerId = CurrentUser.Id;
                 NotifyColleagues(App.Messages.MSG_PARTICIPANTS_CHANGED, Participants);
+            } else {
+                OwnerId = Tricount.Creator;
             }
             DeleteCommand = new RelayCommand<User>(DeleteParticipant, CanDeleteParticipant);
             AddCommand = new RelayCommand(AddParticipant, CanAddParticipant);
             AddMyselfCommand = new RelayCommand(AddMyself, CanAddMyself);
-            AddEverybodyCommand = new RelayCommand(AddEverybody);
+            AddEverybodyCommand = new RelayCommand(AddEverybody, CanAddEverybody);
         }
 
         private ObservableCollection<User> _participants;
@@ -61,12 +71,13 @@ namespace prbd_2324_a01.ViewModel
 
         private void LoadParticipants() {
             Participants = new ObservableCollection<User>(Tricount.Participants);
-            //OwnerId = Tricount.Creator;
         }
 
         private void LoadAvailableUsers() {
-            var userIds = _tricount.Subscriptions.Select(s => s.UserId).ToList();
-            AvailableUsers = new ObservableCollection<User>(Context.Users.Where(u => !userIds.Contains(u.Id)).ToList());
+            var participantIds = Participants.Select(p => p.Id).ToList();
+            AvailableUsers = new ObservableCollection<User>(
+                Context.Users.Where(u => !participantIds.Contains(u.Id)).ToList()
+            );
         }
 
         private void DeleteParticipant(User participant) {
@@ -112,6 +123,10 @@ namespace prbd_2324_a01.ViewModel
             AvailableUsers.Clear();
             NotifyColleagues(App.Messages.MSG_PARTICIPANTS_CHANGED, Participants);
 
+        }
+
+        private bool CanAddEverybody() {
+            return !AvailableUsers.IsNullOrEmpty();
         }
     }
 }

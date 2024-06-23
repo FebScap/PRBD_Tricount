@@ -1,5 +1,4 @@
-﻿using Azure;
-using prbd_2324_a01.Model;
+﻿using prbd_2324_a01.Model;
 using prbd_2324_a01.ViewModel;
 using PRBD_Framework;
 using System.Windows.Controls;
@@ -23,7 +22,7 @@ public partial class MainView : WindowBase
             tricount => DoDisplayTricount(tricount));
 
         Register<Tricount>(App.Messages.MSG_TITLE_CHANGED,
-            tricount => DoRenameTab(string.IsNullOrEmpty(tricount.Title) ? "<New Member>" : tricount.Title));
+            tricount => DoRenameTab(string.IsNullOrEmpty(tricount.Title) ? "<New Tricount>" : tricount.Title));
 
         Register<Tricount>(App.Messages.MSG_CLOSE_TAB,
            tricount => DoCloseTab(tricount));
@@ -33,6 +32,9 @@ public partial class MainView : WindowBase
 
         Register<Model.Operation>(App.Messages.MSG_EDIT_OPERATION,
          operation => DoEditOperation(operation));
+
+        Register<Model.Operation>(App.Messages.MSG_DELETE_OPERATION,
+            operation => DoDeleteOperation(operation));
     }
 
     private void DoCloseTab(Tricount tricount) {
@@ -40,12 +42,11 @@ public partial class MainView : WindowBase
     }
 
     private void DoEditTricount(Tricount tricount) {
-        Console.WriteLine(tricount.Title);
         DoCloseTab(tricount);
-        OpenTab(tricount.Title, () => new EditTricountView(tricount));
+        OpenTab(tricount.Title, () => new EditTricountView(tricount, false));
     }
     private void DoAddTricount() {
-        OpenTab("<New Tricount>", () => new EditTricountView());
+        OpenTab("<New Tricount>", () => new EditTricountView(new Tricount(), true));
     }
 
     private void DoDeleteTricount(Tricount tricount) {
@@ -54,6 +55,10 @@ public partial class MainView : WindowBase
             t.Delete();
             NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, t);
         }
+    }
+    private void DoDeleteOperation(Operation operation) {
+        operation.Delete();
+        NotifyColleagues(App.Messages.MSG_TRICOUNT_CHANGED, operation.GetTricount());
     }
 
     private void DoDisplayTricount(Tricount tricount) {

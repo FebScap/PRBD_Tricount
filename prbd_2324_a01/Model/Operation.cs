@@ -47,5 +47,43 @@ public class Operation : EntityBase<PridContext>
         return shares;
     }
 
+    public int getUserWeight(int userId) {
+        return Context.Repartitions.Where(r => r.UserId == userId && r.OperationId == this.Id).Select(r => r.Weight).FirstOrDefault();
+    }
 
+    public void Add() {
+        Context.Operations.Add(this);
+        Context.SaveChanges();
+    }
+
+    public void Update() {
+        Context.Operations.Update(this);
+        Context.SaveChanges();
+    }
+
+    public void UpdateBalance(Dictionary<int, int> balance) {
+        foreach (var rep in balance) {
+            if (Context.Repartitions.Find(this.Id, rep.Key) != null) {
+                Repartition r = Context.Repartitions.Find(this.Id, rep.Key);
+                if (rep.Value == 0) {
+                    Context.Repartitions.Remove(r);
+                } else {
+                    r.Weight = rep.Value;
+                    Context.Repartitions.Update(r);
+                }
+            } else {
+                if (rep.Value != 0) Context.Repartitions.Add(new Repartition(this.Id, rep.Key, rep.Value)); 
+            }
+        }
+        Context.SaveChanges();
+    }
+
+    public Tricount GetTricount() {
+        return Context.Tricounts.Find(this.Tricount);
+    }
+
+    internal void Delete() {
+        Context.Operations.Remove(this);
+        Context.SaveChanges();
+    }
 }

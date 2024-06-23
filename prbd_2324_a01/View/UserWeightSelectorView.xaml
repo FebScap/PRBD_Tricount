@@ -8,7 +8,7 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:UserWeightSelectorViewModel, IsDesignTimeCreatable=False}">
     <DockPanel HorizontalAlignment="Stretch">
-        <CheckBox VerticalAlignment="Center" Width="150" HorizontalAlignment="Left" IsChecked="True" Content="{Binding Name}" />
+        <CheckBox VerticalAlignment="Center" Width="150" HorizontalAlignment="Left" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" Command="{Binding CheckCommand}" Content="{Binding Name}" />
         <DockPanel HorizontalAlignment="Right">
             <TextBox Width="25" IsEnabled="False" Text="{Binding Weight, UpdateSourceTrigger=PropertyChanged}" Name="NumberTextBox" PreviewTextInput="NumberValidationTextBox" TextAlignment="Center" VerticalAlignment="Stretch"></TextBox>
             <StackPanel Width="15">

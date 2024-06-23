@@ -36,11 +36,13 @@ namespace prbd_2324_a01.Model
         }
 
         public static IQueryable<Tricount> GetAllFiltered(string filter) {
+            var titleList = Context.Operations.Where(o => o.Title.Contains(filter)).Select(s => s.Tricount);
+
             var filtered = from t in Context.Tricounts
                            where t.Title.Contains(filter) ||
                                  t.Description.Contains(filter) ||
                                  t.Participants.Any(p => p.FullName.Contains(filter)) ||
-                                 t.Operations.Any(o => o.Title.Contains(filter))
+                                 titleList.Contains(t.Id)
                            select t;
             return filtered;
         }

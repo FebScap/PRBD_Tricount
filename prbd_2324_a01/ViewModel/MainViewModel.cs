@@ -11,6 +11,7 @@ public class MainViewModel : ViewModelBase<User, PridContext>
     }
 
     public ICommand ReloadDataCommand { get; set; }
+    public ICommand ResetDataCommand { get; set; }
 
     public MainViewModel() : base() {
         ReloadDataCommand = new RelayCommand(() => {
@@ -18,6 +19,13 @@ public class MainViewModel : ViewModelBase<User, PridContext>
                 return;
             App.ClearContext();
             NotifyColleagues(ApplicationBaseMessages.MSG_REFRESH_DATA);
+        });
+        ResetDataCommand = new RelayCommand(() => {
+            Console.Write("Reset Database...");
+            Context.Database.EnsureDeleted();
+            Context.Database.EnsureCreated();
+            NotifyColleagues(ApplicationBaseMessages.MSG_REFRESH_DATA);
+            Console.Write(" done");
         });
     }
 }

@@ -25,6 +25,8 @@ public class DisplayTricountViewModel : ViewModelBase<User, PridContext>
         set => SetProperty(ref _users, value);
     }
 
+    public string CanDelete => DeleteButtonVisibility();
+
     private readonly Tricount _tricount;
 
     public Tricount Tricount {
@@ -74,6 +76,11 @@ public class DisplayTricountViewModel : ViewModelBase<User, PridContext>
 
         Operations = new ObservableCollection<OperationCardViewModel>(operations.Select(o => new OperationCardViewModel(o)));
         Users = new ObservableCollection<UserBalanceCardViewModel>(users.Select(u => new UserBalanceCardViewModel(u, Tricount)));
+    }
+
+    private string DeleteButtonVisibility() {
+        if (CurrentUser.Id == Tricount.Creator || CurrentUser.Role == 1) return "Visible";
+        return "Collapsed";
     }
 }
 

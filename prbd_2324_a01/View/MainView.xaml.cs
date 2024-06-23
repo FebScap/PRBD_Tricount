@@ -1,6 +1,7 @@
 ﻿using prbd_2324_a01.Model;
 using prbd_2324_a01.ViewModel;
 using PRBD_Framework;
+using System.ComponentModel;
 using System.Windows.Controls;
 
 namespace prbd_2324_a01.View;
@@ -96,5 +97,9 @@ public partial class MainView : WindowBase
 
     private void MenuLogout_Click(object sender, System.Windows.RoutedEventArgs e) {
         NotifyColleagues(App.Messages.MSG_LOGOUT);
+    }
+
+    protected override void OnClosing(CancelEventArgs e) {
+        UnRegister();
     }
 }

@@ -35,12 +35,18 @@ namespace prbd_2324_a01.Model
             return Context.Tricounts;
         }
 
-        public static IQueryable<Tricount> GetAllFiltered(string Filter) {
+        public static IQueryable<Tricount> GetAllFiltered(string filter) {
+            var titleList = Context.Operations.Where(o => o.Title.Contains(filter)).Select(s => s.Tricount);
+
             var filtered = from t in Context.Tricounts
-                           where t.Title.Contains(Filter) || t.Description.Contains(Filter)
+                           where t.Title.Contains(filter) ||
+                                 t.Description.Contains(filter) ||
+                                 t.Participants.Any(p => p.FullName.Contains(filter)) ||
+                                 titleList.Contains(t.Id)
                            select t;
             return filtered;
         }
+
 
         public double GetTotalExpenses() {
             double totalExpenses = 0;

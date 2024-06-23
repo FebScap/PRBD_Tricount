@@ -88,7 +88,7 @@ namespace prbd_2324_a01.ViewModel
             }
         }
         private bool CanDeleteParticipant(User participant) {
-            return participant.Id != OwnerId;
+            return participant.Id != OwnerId && Tricount.CalculateBalances().GetValueOrDefault(participant.Id) == 0;
         }
 
         private void AddParticipant() {
